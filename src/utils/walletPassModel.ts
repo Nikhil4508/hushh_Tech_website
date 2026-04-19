@@ -5,10 +5,23 @@ export const WALLET_CARD_ORGANIZATION_NAME = "Hushh Technologies";
 export const WALLET_CARD_ORGANIZATION_FALLBACK = "Hushh";
 export const WALLET_CARD_STATUS = "Gold Member";
 
-const getTrimmedString = (value) =>
+export interface WalletPassInput {
+  name: string;
+  email?: string | null;
+  organisation?: string | null;
+  slug?: string | null;
+  userId?: string | null;
+  investmentAmount?: number | null;
+}
+
+const getTrimmedString = (value: any): string =>
   typeof value === "string" && value.trim().length > 0 ? value.trim() : "";
 
-export const getWalletPayloadFieldValue = (fields, key, fallback = "") => {
+export const getWalletPayloadFieldValue = (
+  fields: any[],
+  key: string,
+  fallback: string = ""
+): string => {
   if (!Array.isArray(fields)) {
     return fallback;
   }
@@ -18,7 +31,7 @@ export const getWalletPayloadFieldValue = (fields, key, fallback = "") => {
   return value || fallback;
 };
 
-export const getWalletInvestmentClass = (amount) => {
+export const getWalletInvestmentClass = (amount: any): string => {
   if (typeof amount !== "number" || Number.isNaN(amount)) {
     return "Class C";
   }
@@ -28,28 +41,33 @@ export const getWalletInvestmentClass = (amount) => {
   return "Class C";
 };
 
-const normalizeInvestmentClass = (value) => {
-  const normalizedValue = getTrimmedString(value).replace(/^Investor\s*-\s*/i, "");
+const normalizeInvestmentClass = (value: any): string => {
+  const normalizedValue = getTrimmedString(value).replace(
+    /^Investor\s*-\s*/i,
+    ""
+  );
   return normalizedValue || "Class C";
 };
 
-const buildInvestmentLabel = (investmentClass) => `Investor - ${investmentClass}`;
+const buildInvestmentLabel = (investmentClass: string): string =>
+  `Investor - ${investmentClass}`;
 
-const getDisplayValue = (value, fallback) => getTrimmedString(value) || fallback;
+const getDisplayValue = (value: any, fallback: string): string =>
+  getTrimmedString(value) || fallback;
 
-const buildPublicProfileUrl = (input) =>
+const buildPublicProfileUrl = (input: WalletPassInput): string | null =>
   getTrimmedString(input?.slug)
     ? `${DEFAULT_WALLET_ROOT_URL}/investor/${getTrimmedString(input.slug)}`
     : null;
 
-const buildMembershipId = (input) =>
+const buildMembershipId = (input: WalletPassInput): string =>
   getTrimmedString(input?.slug) ||
   getTrimmedString(input?.userId) ||
   (getTrimmedString(input?.email)
     ? getTrimmedString(input.email).split("@")[0]
     : "hushh-investor");
 
-export const buildWalletCardContent = (input = {}) => {
+export const buildWalletCardContent = (input: WalletPassInput = { name: "" }) => {
   const profileUrl = buildPublicProfileUrl(input);
   const investmentClass = getWalletInvestmentClass(input.investmentAmount);
 
@@ -71,7 +89,7 @@ export const buildWalletCardContent = (input = {}) => {
   };
 };
 
-export const buildGoldPassPayload = (input = {}) => {
+export const buildGoldPassPayload = (input: WalletPassInput = { name: "" }) => {
   const content = buildWalletCardContent(input);
 
   return {
@@ -136,7 +154,7 @@ export const buildGoldPassPayload = (input = {}) => {
   };
 };
 
-export const buildWalletCardContentFromPayload = (payload = {}) => {
+export const buildWalletCardContentFromPayload = (payload: any = {}) => {
   const passUrl =
     getTrimmedString(payload?.barcode?.message) || DEFAULT_WALLET_ROOT_URL;
   const investmentLabel = getWalletPayloadFieldValue(
