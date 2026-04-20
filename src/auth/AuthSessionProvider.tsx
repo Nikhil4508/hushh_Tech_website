@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 import config from "../resources/config/config";
+import { getOrCreateVisitorId } from "../utils/visitorId";
 import {
   type AuthSessionReason,
   type AuthSessionSnapshot,
@@ -22,10 +23,10 @@ import {
   getValidatedSession,
   parseAuthBroadcastEvent,
   startUnifiedOAuth,
-  validateSessionCandidate,
 } from "./session";
 
 interface AuthSessionContextValue extends AuthSessionSnapshot {
+  visitorId: string;
   startOAuth: (provider: OAuthProvider) => Promise<OAuthStartResult>;
   signOut: () => Promise<void>;
   revalidateSession: () => Promise<AuthSessionSnapshot>;
@@ -53,6 +54,7 @@ export const AuthSessionProvider: React.FC<{
   const supabase = config.supabaseClient;
   const [snapshot, setSnapshot] =
     useState<AuthSessionSnapshot>(INITIAL_SNAPSHOT);
+  const [visitorId] = useState(() => getOrCreateVisitorId());
   const pendingSignedOutStateRef = useRef<PendingSignedOutState | null>(null);
 
   const applySnapshot = useCallback((nextSnapshot: AuthSessionSnapshot) => {
@@ -279,12 +281,20 @@ export const AuthSessionProvider: React.FC<{
   const value = useMemo<AuthSessionContextValue>(
     () => ({
       ...snapshot,
+      visitorId,
       startOAuth,
       signOut,
       revalidateSession,
       handleAccountDeleted,
     }),
-    [handleAccountDeleted, revalidateSession, signOut, snapshot, startOAuth]
+    [
+      handleAccountDeleted,
+      revalidateSession,
+      signOut,
+      snapshot,
+      startOAuth,
+      visitorId,
+    ]
   );
 
   return (
