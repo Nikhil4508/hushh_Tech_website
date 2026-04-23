@@ -5,8 +5,19 @@ type Listener<T = any> = (data: T) => void;
  * Lightweight event bus for application-wide notifications.
  * Used for reactive UI updates across components (e.g., payment verification).
  */
-class EventBus {
+export class EventBus {
   private listeners: Map<string, Set<Listener>> = new Map();
+  private channel: BroadcastChannel;
+
+  constructor() {
+    this.channel = new BroadcastChannel('hushh-events');
+    
+    // Listen for events from other tabs
+    this.channel.onmessage = (event) => {
+      const { type, data } = event.data;
+      this.listeners.get(type)?.forEach((listener) => listener(data));
+    };
+  }
 
   /**
    * Subscribe to an event.
@@ -24,10 +35,14 @@ class EventBus {
   }
 
   /**
-   * Emit an event to all subscribers.
+   * Emit an event to all subscribers in this tab and other tabs.
    */
   emit<T = any>(event: string, data?: T): void {
+    // Notify local listeners
     this.listeners.get(event)?.forEach((listener) => listener(data));
+    
+    // Notify other tabs
+    this.channel.postMessage({ type: event, data });
   }
 }
 
