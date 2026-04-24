@@ -510,6 +510,8 @@ describe('Plaid Integration — Supabase Storage', () => {
         asset_report: assetsResult.available ? assetsResult.data : null,
         asset_report_token: assetsResult.data?.asset_report_token || null,
         investments: investResult.available ? investResult.data : null,
+        plaid_access_token_encrypted: MOCK_ACCESS_TOKEN,
+        auth_numbers_encrypted: null,
         available_products: {
           balance: balanceResult.available,
           assets: assetsResult.available,

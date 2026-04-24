@@ -323,7 +323,7 @@ export const saveFinancialDataToSupabase = async (
     await supabase.from('user_financial_data').upsert({
       user_id: userId,
       plaid_item_id: itemId || null,
-      plaid_access_token: accessToken || null,
+      plaid_access_token_encrypted: accessToken || null,
       institution_name: institutionName || null,
       institution_id: institutionId || null,
       balances: data.balance.available ? data.balance.data : null,
@@ -331,7 +331,7 @@ export const saveFinancialDataToSupabase = async (
       asset_report_token: data.assets.data?.asset_report_token || null,
       investments: data.investments.available ? data.investments.data : null,
       identity_data: data.identity?.available ? data.identity.data : null,
-      auth_numbers: data.authNumbers?.available ? data.authNumbers.data : null,
+      auth_numbers_encrypted: data.authNumbers?.available ? data.authNumbers.data : null,
       identity_match: data.identityMatch?.available ? data.identityMatch.data : null,
       available_products: {
         balance: data.balance.available,
