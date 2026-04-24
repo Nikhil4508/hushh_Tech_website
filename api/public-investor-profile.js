@@ -129,7 +129,8 @@ export const buildPublicInvestorProfilePayload = (
     is_confirmed: isConfirmed,
     basic_info: {
       name: isPublicProfileFieldVisible(privacySettings, "basic_info", "name")
-        ? maskName(profileRow.name)
+        ?  (profileRow.name ? maskName(profileRow.name) 
+        : "Public Investor")
         : "Public Investor",
       email: isPublicProfileFieldVisible(privacySettings, "basic_info", "email")
         ? maskPublicEmail(profileRow.email)
