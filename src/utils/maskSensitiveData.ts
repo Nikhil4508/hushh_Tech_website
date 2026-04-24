@@ -27,8 +27,9 @@ export function maskName(name: string | any): string {
   const firstName = parts[0];
   const lastName = parts[parts.length - 1];
   const firstChar = [...firstName][0];
-  
-  return `${firstChar.toLowerCase()}*** ${lastName.toLowerCase()}`;
+  const lastNameInitial = [...lastName][0];
+
+  return `${firstChar.toLowerCase()}*** ${lastNameInitial.toLowerCase()}`;
 }
 
 export function maskEmail(email: string): string {

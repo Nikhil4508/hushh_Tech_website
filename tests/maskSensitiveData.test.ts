@@ -3,8 +3,8 @@ import { maskName } from '../src/utils/maskSensitiveData';
 
 describe('maskName', () => {
   it('should mask multi-word names correctly', () => {
-    expect(maskName('John Alexander Doe')).toBe('j*** doe');
-    expect(maskName('Nikhil Doe')).toBe('n*** doe');
+    expect(maskName('John Alexander Doe')).toBe('j*** d');
+    expect(maskName('Nikhil Doe')).toBe('n*** d');
   });
 
   it('should mask single-word names correctly', () => {
