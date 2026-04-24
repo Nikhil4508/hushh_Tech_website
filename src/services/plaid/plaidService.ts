@@ -5,6 +5,7 @@
  */
 
 import { getAuthenticatedSession } from "../../auth/session";
+import { encrypt } from "../../utils/security";
 
 // =====================================================
 // Types
@@ -323,15 +324,15 @@ export const saveFinancialDataToSupabase = async (
     await supabase.from('user_financial_data').upsert({
       user_id: userId,
       plaid_item_id: itemId || null,
-      plaid_access_token_encrypted: accessToken || null,
+      plaid_access_token_encrypted: accessToken ? await encrypt(accessToken) : null,
       institution_name: institutionName || null,
       institution_id: institutionId || null,
       balances: data.balance.available ? data.balance.data : null,
       asset_report: data.assets.available ? data.assets.data : null,
       asset_report_token: data.assets.data?.asset_report_token || null,
       investments: data.investments.available ? data.investments.data : null,
-      identity_data: data.identity?.available ? data.identity.data : null,
-      auth_numbers_encrypted: data.authNumbers?.available ? data.authNumbers.data : null,
+      identity_data_encrypted: (data.identity?.available && data.identity.data) ? await encrypt(JSON.stringify(data.identity.data)) : null,
+      auth_numbers_encrypted: (data.authNumbers?.available && data.authNumbers.data) ? await encrypt(JSON.stringify(data.authNumbers.data)) : null,
       identity_match: data.identityMatch?.available ? data.identityMatch.data : null,
       available_products: {
         balance: data.balance.available,
