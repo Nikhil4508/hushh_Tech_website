@@ -2,16 +2,46 @@
  * Utility functions to mask sensitive data for public profile viewing
  */
 
+/**
+ * Mask a person's name for PII protection.
+ * - Multi-word: J*** Doe
+ * - Single-word (>2 chars): J***n
+ * - Empty/Small/Invalid: Anonymous
+ */
+export function maskName(name: string | any): string {
+  if (!name || typeof name !== 'string') return 'Anonymous';
+  
+  const trimmed = name.trim();
+  if (!trimmed) return 'Anonymous';
+  
+  const parts = trimmed.split(/\s+/);
+  
+  // Single word case
+  if (parts.length === 1) {
+    const chars = [...parts[0]];
+    if (chars.length <= 2) return 'Anonymous';
+    return `${chars[0].toLowerCase()}***${chars[chars.length - 1].toLowerCase()}`;
+  }
+  
+  // Multi-word case
+  const firstName = parts[0];
+  const lastName = parts[parts.length - 1];
+  const firstChar = [...firstName][0];
+  
+  return `${firstChar.toLowerCase()}*** ${lastName.toLowerCase()}`;
+}
+
 export function maskEmail(email: string): string {
   if (!email || !email.includes('@')) return '***@***.com';
   
   const [username, domain] = email.split('@');
+  const userChars = [...username];
   
-  if (username.length <= 2) {
-    return `${username[0]}***@${domain}`;
+  if (userChars.length <= 2) {
+    return `${userChars[0]}***@${domain}`;
   }
   
-  const maskedUsername = username[0] + '***' + username.slice(-1);
+  const maskedUsername = userChars[0] + '***' + userChars[userChars.length - 1];
   return `${maskedUsername}@${domain}`;
 }
 
@@ -41,7 +71,7 @@ export interface MaskedProfileData {
 
 export function maskProfileData(profileData: any): MaskedProfileData {
   return {
-    name: profileData.name,
+    name: maskName(profileData.name),
     email: maskEmail(profileData.email),
     age: profileData.age,
     phone: maskPhone(profileData.phone_number, profileData.phone_country_code),
@@ -57,8 +87,7 @@ export function maskProfileData(profileData: any): MaskedProfileData {
 export function maskOnboardingField(fieldKey: string, value: any): string {
   // Always mask legal names
   if (fieldKey === 'legal_first_name' || fieldKey === 'legal_last_name') {
-    if (!value || typeof value !== 'string') return '***';
-    return value.length <= 2 ? '***' : `${value[0]}***${value.slice(-1)}`;
+    return maskName(value);
   }
   
   // Always mask date of birth

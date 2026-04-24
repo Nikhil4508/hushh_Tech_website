@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { maskName } from "../src/utils/maskSensitiveData";
 
 const getServiceClient = () => {
   const supabaseUrl = process.env.SUPABASE_URL?.trim();
@@ -128,7 +129,7 @@ export const buildPublicInvestorProfilePayload = (
     is_confirmed: isConfirmed,
     basic_info: {
       name: isPublicProfileFieldVisible(privacySettings, "basic_info", "name")
-        ? profileRow.name?.trim() || "Public Investor"
+        ? maskName(profileRow.name)
         : "Public Investor",
       email: isPublicProfileFieldVisible(privacySettings, "basic_info", "email")
         ? maskPublicEmail(profileRow.email)
