@@ -11,6 +11,10 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { encrypt } from '../src/utils/security';
+
+// Set dummy encryption key for tests
+process.env.VITE_ENCRYPTION_KEY = 'a'.repeat(32);
 
 // =====================================================
 // Mock Data — Plaid Sandbox responses
@@ -494,7 +498,7 @@ describe('Plaid Integration — Data Aggregation', () => {
 
 describe('Plaid Integration — Supabase Storage', () => {
   describe('7. user_financial_data table structure', () => {
-    it('should build correct upsert payload', () => {
+    it('should build correct upsert payload', async () => {
       const balanceResult = { available: true, data: mockBalanceResponse, error: null, reason: null };
       const assetsResult = { available: true, data: mockAssetReportResponse, error: null, reason: null };
       const investResult = { available: true, data: mockInvestmentsResponse, error: null, reason: null };
@@ -510,7 +514,9 @@ describe('Plaid Integration — Supabase Storage', () => {
         asset_report: assetsResult.available ? assetsResult.data : null,
         asset_report_token: assetsResult.data?.asset_report_token || null,
         investments: investResult.available ? investResult.data : null,
-        plaid_access_token_encrypted: MOCK_ACCESS_TOKEN,
+         // The expected value should be the result of encrypting MOCK_ACCESS_TOKEN.
+        // This will require importing the `encrypt` function into the test file.
+        plaid_access_token_encrypted: await encrypt(MOCK_ACCESS_TOKEN),
         auth_numbers_encrypted: null,
         available_products: {
           balance: balanceResult.available,

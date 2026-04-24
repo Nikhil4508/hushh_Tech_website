@@ -1,11 +1,17 @@
 export const DEFAULT_AUTH_REDIRECT = "/hushh-user-profile";
 
-// Encryption key derived from a simple string (in production, this should be a robust env var)
-const ENCRYPTION_KEY_RAW = "hushh-secret-key-placeholder";
 
 async function getEncryptionKey() {
+  const envKey = 
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_ENCRYPTION_KEY) || 
+    (typeof process !== 'undefined' && process.env?.VITE_ENCRYPTION_KEY) ||
+    (typeof process !== 'undefined' && process.env?.ENCRYPTION_KEY);
+
+  if (!envKey || envKey.length !== 32) {
+    throw new Error("A 32-character ENCRYPTION_KEY (or VITE_ENCRYPTION_KEY) must be set as an environment variable.");
+  }
   const encoder = new TextEncoder();
-  const keyData = encoder.encode(ENCRYPTION_KEY_RAW.padEnd(32, "0").slice(0, 32));
+  const keyData = encoder.encode(envKey);
   return crypto.subtle.importKey(
     "raw",
     keyData,
@@ -35,7 +41,11 @@ export async function encrypt(plaintext: string): Promise<string> {
   combined.set(iv);
   combined.set(new Uint8Array(ciphertext), iv.length);
 
-  return btoa(String.fromCharCode(...combined));
+  let binary = '';
+  for (let i = 0; i < combined.byteLength; i++) {
+    binary += String.fromCharCode(combined[i]);
+  }
+  return btoa(binary);
 }
 
 /**
@@ -43,11 +53,11 @@ export async function encrypt(plaintext: string): Promise<string> {
  */
 export async function decrypt(combinedBase64: string): Promise<string> {
   const key = await getEncryptionKey();
-  const combined = new Uint8Array(
-    atob(combinedBase64)
-      .split("")
-      .map((c) => c.charCodeAt(0))
-  );
+  const binaryString = atob(combinedBase64);
+  const combined = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    combined[i] = binaryString.charCodeAt(i);
+  }
 
   const iv = combined.slice(0, 12);
   const ciphertext = combined.slice(12);
