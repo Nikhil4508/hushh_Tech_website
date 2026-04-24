@@ -57,7 +57,7 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [visitorId, slug]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -180,11 +180,14 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
       }
 
       console.error(err);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
-      }]);
+      setMessages(prev => prev.slice(0, -1));
+      setInput(text);
+      toast({
+        title: 'Message Error',
+        description: 'Sorry, I encountered an error. Please try again.',
+        status: 'error',
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }

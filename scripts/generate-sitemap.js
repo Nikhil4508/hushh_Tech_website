@@ -13,31 +13,12 @@ const staticPages = ["/", "/about", "/contact", "/blog", "/privacy-policy", "/te
 // Additional community routes based on observed URL structure in posts.ts
 const communityRoutes = [
   // Market updates
-  "/community/daily-market-update/10-apr-2025",
-  "/community/daily-market-update/11-apr-2025",
-  "/community/daily-market-update/15-apr-2025",
-  "/community/daily-market-update/16-apr-2025",
-  "/community/daily-market-update/17-apr-2025",
-  "/community/daily-market-update/14-feb-2025",
-  "/community/market/daily-market-update",
   "/community/market/updates",
   "/community/market/alpha-aloha-fund-update",
-  "/community/market/weekly-report",
-  "/community/market/feb-5-market-update",
-  "/community/market/latest-fund-update-11th-feb",
-  "/community/market/updates-28-feb-2025",
-  "/community/market/market-updates-1st-april",
-  "/community/market/market-updates-4th-april",
-  "/community/market/market-update-19-feb",
-  "/community/market/market-update-20-feb",
-  "/community/market/daily-update-30-may",
   
   // Funds
   "/community/funds/hushh-technology-fund",
   "/community/funds/renaissance-tech",
-  "/community/funds/fund-ahushh",
-  "/community/funds/fee-schedule",
-  "/community/funds/alpha-aloha-fund-update-feb6",
   "/community/funds/hushh-alpha-fund-nav-update",
   
   // General
@@ -52,7 +33,6 @@ const communityRoutes = [
   // Product updates
   "/community/product/product-updates",
   "/community/product/hushh-wallet",
-  "/community/product/renaissance-tech",
   
   // Investor relations
   "/community/investor-relations/investor-faq/charlie-munger-edition",
@@ -97,25 +77,21 @@ const generateSitemap = () => {
   console.log("🔹 Generating sitemap...");
   const existingLastMods = readExistingLastMods();
   const fallbackLastMod = fs.statSync(path.join(__dirname, "../package.json")).mtime.toISOString();
-  const scannedPostLastMods = new Map();
+  
+  // Use a Map to deduplicate URLs and store their properties
+  const urlMap = new Map();
 
-  // Generate URLs for static pages
-  const staticUrls = staticPages.map((page) => {
+  // 1. Static Pages
+  staticPages.forEach((page) => {
     const url = `${SITE_URL}${page}`;
-    return `
-      <url>
-        <loc>${url}</loc>
-        <lastmod>${getStableLastMod(existingLastMods, url, fallbackLastMod)}</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.7</priority>
-      </url>`;
+    urlMap.set(url, {
+      lastmod: getStableLastMod(existingLastMods, url, fallbackLastMod),
+      changefreq: "daily",
+      priority: "0.7"
+    });
   });
 
-  // Additionally, scan directories for any posts that might not be included
-  const postUrls = [];
-  let postCount = 0;
-  
-  // Directories containing community posts
+  // 2. Scan Directories for Posts
   const publicPostDirectories = [
     path.join(__dirname, "../src/content/posts/market"),
     path.join(__dirname, "../src/content/posts/funds"),
@@ -124,72 +100,62 @@ const generateSitemap = () => {
     path.join(__dirname, "../src/content/posts/product")
   ];
   
-  // Process each public directory
+  let scannedCount = 0;
   publicPostDirectories.forEach(directory => {
     if (fs.existsSync(directory)) {
-      // Get the category name from the directory path
       const category = path.basename(directory);
-      
-      // Get all the files in the directory
       const files = fs.readdirSync(directory);
       
       files.forEach(file => {
-        // Skip if not a .tsx or .jsx file
         if (!file.endsWith('.tsx') && !file.endsWith('.jsx')) return;
-        
-        // Get the file name without extension to use as a slug part
         const fileName = path.basename(file, path.extname(file));
-        
-        // Create a slug for the post (convert to kebab-case if needed)
         const slug = fileName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
         
-        // Use file's modified date as lastmod
         const filePath = path.join(directory, file);
         const stats = fs.statSync(filePath);
         const lastMod = stats.mtime.toISOString();
         const url = `${SITE_URL}/community/${category}/${slug}`;
-        scannedPostLastMods.set(url, lastMod);
         
-        // Add URL entry for the post
-        postUrls.push(`
-      <url>
-        <loc>${url}</loc>
-        <lastmod>${lastMod}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-      </url>`);
-        
-        postCount++;
+        urlMap.set(url, {
+          lastmod: lastMod,
+          changefreq: "weekly",
+          priority: "0.8"
+        });
+        scannedCount++;
       });
     }
   });
 
-  // Generate URLs for community routes with deterministic lastmod values.
-  const communityUrls = communityRoutes.map((route) => {
+  // 3. Manual Community Routes (only if not already scanned)
+  communityRoutes.forEach((route) => {
     const url = `${SITE_URL}${route}`;
-    const lastMod =
-      scannedPostLastMods.get(url) || getStableLastMod(existingLastMods, url, fallbackLastMod);
-    return `
-      <url>
-        <loc>${url}</loc>
-        <lastmod>${lastMod}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-      </url>`;
+    if (!urlMap.has(url)) {
+      urlMap.set(url, {
+        lastmod: getStableLastMod(existingLastMods, url, fallbackLastMod),
+        changefreq: "weekly",
+        priority: "0.8"
+      });
+    }
   });
 
-  // Combine all URLs
-  const allUrls = [...staticUrls, ...communityUrls, ...postUrls].join("\n");
+  // Generate XML content
+  const urlEntries = Array.from(urlMap.entries()).map(([url, props]) => `
+      <url>
+        <loc>${url}</loc>
+        <lastmod>${props.lastmod}</lastmod>
+        <changefreq>${props.changefreq}</changefreq>
+        <priority>${props.priority}</priority>
+      </url>`).join("");
 
   const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${allUrls}
+      ${urlEntries}
     </urlset>`;
 
   fs.writeFileSync(SITEMAP_PATH, sitemapContent);
 
   console.log(`✅ Sitemap successfully generated at ${SITEMAP_PATH}`);
-  console.log(`✅ Added ${staticUrls.length} static pages, ${communityUrls.length} community pages, and ${postCount} scanned posts`);
+  console.log(`✅ Included ${urlMap.size} unique URLs (${scannedCount} scanned from posts)`);
   console.log(`🔎 Verifying file: ${fs.existsSync(SITEMAP_PATH) ? "✅ Exists" : "❌ Not Found"}`);
 };
 

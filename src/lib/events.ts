@@ -15,7 +15,13 @@ export class EventBus {
     // Listen for events from other tabs
     this.channel.onmessage = (event) => {
       const { type, data } = event.data;
-      this.listeners.get(type)?.forEach((listener) => listener(data));
+      this.listeners.get(type)?.forEach((listener) => {
+        try {
+          listener(data);
+        } catch (error) {
+          console.error(`Error in cross-tab event listener for "${type}":`, error);
+        }
+      });
     };
   }
 
@@ -39,7 +45,13 @@ export class EventBus {
    */
   emit<T = any>(event: string, data?: T): void {
     // Notify local listeners
-    this.listeners.get(event)?.forEach((listener) => listener(data));
+    this.listeners.get(event)?.forEach((listener) => {
+      try {
+        listener(data);
+      } catch (error) {
+        console.error(`Error in local event listener for "${event}":`, error);
+      }
+    });
     
     // Notify other tabs
     this.channel.postMessage({ type: event, data });

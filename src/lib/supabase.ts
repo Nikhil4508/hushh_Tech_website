@@ -5,10 +5,9 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  // Graceful fallback or error depending on app requirements
   // For this app, these are critical for core functionality
-  console.warn(
-    "[Supabase] Missing environment variables. Some features may not work."
+  throw new Error(
+    "[Supabase] Missing critical environment variables: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY must be set."
   );
 }
 
