@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import config from '../../resources/config/config';
-import NdaService from '../../services/nda/ndaService';
+import { NdaService } from '../../services/api/ndaService';
 import HushhTechHeader from '../../components/hushh-tech-header/HushhTechHeader';
 import HushhTechFooter from '../../components/hushh-tech-footer/HushhTechFooter';
 import HushhTechCta, { HushhTechCtaVariant } from '../../components/hushh-tech-cta/HushhTechCta';
@@ -282,17 +282,16 @@ const SignNDAPage: React.FC = () => {
         /* Build list of acknowledged documents for notification */
         const acknowledgedDocs = FUND_DOCUMENTS.map((d) => d.fullName);
 
-        NdaService.sendNDANotification(
-          trimmedName,
-          userEmail || 'unknown@email.com',
-          result.signedAt || new Date().toISOString(),
-          result.ndaVersion || 'v1.0',
-          generatedPdfUrl,
-          pdfBlob,
+        await NdaService.sendNDANotification({
+          signerName: trimmedName,
+          signerEmail: userEmail || 'unknown@email.com',
+          signedAt: result.signedAt || new Date().toISOString(),
+          ndaVersion: result.ndaVersion || 'v1.0',
+          pdfUrl: generatedPdfUrl,
+          pdfBlob: pdfBlob,
           userId,
-          undefined,
-          acknowledgedDocs
-        ).catch((err) => console.error('[SignNDA] Notification failed:', err));
+          documentsAcknowledged: acknowledgedDocs,
+        });
 
         toast({
           title: 'agreements signed successfully',

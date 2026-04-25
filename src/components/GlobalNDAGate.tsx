@@ -15,11 +15,10 @@
 import React, { useEffect, useRef, useState, ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Spinner, VStack, Text } from '@chakra-ui/react';
-import NdaService from '../services/nda/ndaService';
+import { NdaService } from '../services/api/ndaService';
 import { useAuthSession } from '../auth/AuthSessionProvider';
 import {
   buildLoginRedirectPath,
-  canGuestAccessRoute,
   isAuthenticatedAccountRoute,
   isGuestAuthRoute,
   isPublicSharedProfileRoute,

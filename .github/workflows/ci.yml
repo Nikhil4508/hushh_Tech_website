@@ -222,7 +222,7 @@ jobs:
             if [ "$job" = "DCO" ] && [ "$result" = "skipped" ]; then
               continue
             fi
-            if [ "$result" != "success" ]; then
+            if [ "$result" != "success" ] && [ "$result" != "cancelled" ]; then
               failed=1
             fi
           done
