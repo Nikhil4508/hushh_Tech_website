@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import config from '../../resources/config/config';
-import { signNDA, sendNDANotification, generateNDAPdf, uploadSignedNDA } from '../../services/nda/ndaService';
+import NdaService from '../../services/nda/ndaService';
 import HushhTechHeader from '../../components/hushh-tech-header/HushhTechHeader';
 import HushhTechFooter from '../../components/hushh-tech-footer/HushhTechFooter';
 import HushhTechCta, { HushhTechCtaVariant } from '../../components/hushh-tech-cta/HushhTechCta';
@@ -251,7 +251,7 @@ const SignNDAPage: React.FC = () => {
       /* PDF generation — non-blocking */
       try {
         if (accessToken) {
-          const pdfResult = await generateNDAPdf(
+          const pdfResult = await NdaService.generateNDAPdf(
             {
               signerName: trimmedName,
               signerEmail: userEmail || 'unknown@email.com',
@@ -264,7 +264,7 @@ const SignNDAPage: React.FC = () => {
 
           if (pdfResult.success && pdfResult.blob) {
             pdfBlob = pdfResult.blob;
-            const uploadResult = await uploadSignedNDA(userId, pdfResult.blob);
+            const uploadResult = await NdaService.uploadSignedNDA(userId, pdfResult.blob);
             if (uploadResult.success && uploadResult.url) {
               generatedPdfUrl = uploadResult.url;
             }
@@ -274,7 +274,7 @@ const SignNDAPage: React.FC = () => {
         console.warn('[SignNDA] PDF generation/upload failed, continuing:', pdfError);
       }
 
-      const result = await signNDA(trimmedName, 'v1.0', generatedPdfUrl);
+      const result = await NdaService.signNDA(trimmedName, 'v1.0', generatedPdfUrl);
 
       if (!isMountedRef.current) return;
 
@@ -282,7 +282,7 @@ const SignNDAPage: React.FC = () => {
         /* Build list of acknowledged documents for notification */
         const acknowledgedDocs = FUND_DOCUMENTS.map((d) => d.fullName);
 
-        sendNDANotification(
+        NdaService.sendNDANotification(
           trimmedName,
           userEmail || 'unknown@email.com',
           result.signedAt || new Date().toISOString(),

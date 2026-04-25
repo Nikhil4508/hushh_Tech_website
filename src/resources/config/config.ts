@@ -8,6 +8,7 @@ export interface ClientEnvConfig {
   VITE_SUPABASE_REDIRECT_URL?: string;
   VITE_PLAID_REDIRECT_URI?: string;
   VITE_NDA_GENERATION_URL?: string;
+  VITE_NDA_SIGNED_NOTIFICATION_URL?: string;
 }
 
 interface Config {
@@ -15,6 +16,7 @@ interface Config {
   SUPABASE_ANON_KEY: string;
   redirect_url: string;
   NDA_GENERATION_URL?: string;
+  NDA_SIGNED_NOTIFICATION_URL?: string;
   supabaseClient?: SupabaseClient;
 }
 
@@ -42,6 +44,7 @@ export function buildClientConfig(
       fallbackRedirectUrl
     ),
     NDA_GENERATION_URL: env.VITE_NDA_GENERATION_URL,
+    NDA_SIGNED_NOTIFICATION_URL: env.VITE_NDA_SIGNED_NOTIFICATION_URL,
   };
 }
 

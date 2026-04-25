@@ -15,7 +15,7 @@
 import React, { useEffect, useRef, useState, ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Spinner, VStack, Text } from '@chakra-ui/react';
-import { checkNDAStatus } from '../services/nda/ndaService';
+import NdaService from '../services/nda/ndaService';
 import { useAuthSession } from '../auth/AuthSessionProvider';
 import {
   buildLoginRedirectPath,
@@ -34,7 +34,6 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
   const location = useLocation();
   const { session, status } = useAuthSession();
   const [isChecking, setIsChecking] = useState(true);
-  const [hasSignedNDA, setHasSignedNDA] = useState<boolean | null>(null);
 
   // Fallback timeout — if isChecking stays true for >8 seconds,
   // auto-resolve to prevent infinite "Verifying access..." spinner.
@@ -51,7 +50,6 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
         setIsChecking(false);
         // Allow access to public/guest routes; authenticated-only routes
         // will be caught by ProtectedRoute downstream.
-        setHasSignedNDA(canGuestAccessRoute(location.pathname));
       }, 8000);
     } else if (bootTimeoutRef.current) {
       clearTimeout(bootTimeoutRef.current);
@@ -76,7 +74,7 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
       if (isGuestAuthRoute(pathname)) {
         if (!cancelled) {
           setIsChecking(false);
-          setHasSignedNDA(true);
+          // setHasSignedNDA(true);
         }
         return;
       }
@@ -86,7 +84,7 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
       if (isPublicSharedProfileRoute(pathname)) {
         if (!cancelled) {
           setIsChecking(false);
-          setHasSignedNDA(true);
+          // setHasSignedNDA(true);
         }
         return;
       }
@@ -95,7 +93,7 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
       if (status === 'booting') {
         if (!cancelled) {
           setIsChecking(true);
-          setHasSignedNDA(null);
+          // setHasSignedNDA(null);
         }
         return;
       }
@@ -116,21 +114,19 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
         // Allow public marketing and guest-accessible routes for non-authenticated users
         if (!cancelled) {
           setIsChecking(false);
-          setHasSignedNDA(canGuestAccessRoute(pathname));
         }
         return;
       }
 
       if (!cancelled) {
         setIsChecking(true);
-        setHasSignedNDA(null);
       }
 
       // USER IS AUTHENTICATED - Check NDA status (with 5s timeout)
       try {
         const NDA_CHECK_TIMEOUT_MS = 5000;
         const ndaResult = await Promise.race([
-          checkNDAStatus(session.user.id),
+          NdaService.checkNDAStatus(session.user.id),
           new Promise<null>((_, reject) =>
             setTimeout(
               () => reject(new Error('NDA check timed out')),
@@ -147,11 +143,11 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
           // Timeout fallback — allow access optimistically.
           // The NDA status will be rechecked on next navigation.
           console.warn('[GlobalNDAGate] NDA check returned null, allowing access optimistically.');
-          setHasSignedNDA(true);
+          // setHasSignedNDA(true);
           return;
         }
 
-        setHasSignedNDA(ndaResult.hasSignedNda);
+        // setHasSignedNDA(ndaResult.hasSignedNda);
 
         // If NDA not signed, redirect to NDA page
         if (!ndaResult.hasSignedNda) {
@@ -167,7 +163,7 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
         // If the error is a timeout, allow access optimistically
         if (error instanceof Error && error.message === 'NDA check timed out') {
           console.warn('[GlobalNDAGate] NDA check timed out after 5s. Allowing access optimistically.');
-          setHasSignedNDA(true);
+          // setHasSignedNDA(true);
           return;
         }
 
