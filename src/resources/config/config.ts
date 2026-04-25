@@ -14,6 +14,7 @@ interface Config {
   SUPABASE_URL: string;
   SUPABASE_ANON_KEY: string;
   redirect_url: string;
+  NDA_GENERATION_URL?: string;
   supabaseClient?: SupabaseClient;
 }
 
@@ -40,6 +41,7 @@ export function buildClientConfig(
       env.VITE_SUPABASE_REDIRECT_URL,
       fallbackRedirectUrl
     ),
+    NDA_GENERATION_URL: env.VITE_NDA_GENERATION_URL,
   };
 }
 

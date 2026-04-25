@@ -4,7 +4,6 @@
  */
 
 import config from '../../resources/config/config';
-import { getNdaGenerationUrl } from '../runtime/mainWeb';
 
 // Supabase function URL for NDA notification
 const NDA_NOTIFICATION_FUNCTION_URL = `${config.SUPABASE_URL}/functions/v1/nda-signed-notification`;
@@ -119,7 +118,7 @@ export const generateNDAPdf = async (
 ): Promise<{ success: boolean; pdfUrl?: string; blob?: Blob; error?: string }> => {
   try {
     const response = await fetch(
-      getNdaGenerationUrl(),
+      `${config.SUPABASE_URL}/functions/v1/generate-nda`,
       {
         method: 'POST',
         headers: {
@@ -257,7 +256,7 @@ export const uploadSignedNDA = async (
     const fileName = `nda_${userId}_${Date.now()}.pdf`;
     const filePath = `signed-ndas/${fileName}`;
     
-    const { data, error } = await config.supabaseClient.storage
+    const { error } = await config.supabaseClient.storage
       .from('assets')
       .upload(filePath, pdfBlob, {
         contentType: 'application/pdf',

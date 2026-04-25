@@ -72,4 +72,17 @@ describe("client auth config", () => {
 
     expect(clientConfig.redirect_url).toBe("http://localhost:5173/auth/callback");
   });
+
+  it("maps NDA_GENERATION_URL from env vars", () => {
+    const clientConfig = buildClientConfig(
+      {
+        VITE_SUPABASE_URL: "https://ibsisfnjxeowvdtvgzff.supabase.co",
+        VITE_SUPABASE_ANON_KEY: "anon-key",
+        VITE_NDA_GENERATION_URL: "https://custom-nda.run.app",
+      },
+      "https://hushhtech.com/auth/callback"
+    );
+
+    expect(clientConfig.NDA_GENERATION_URL).toBe("https://custom-nda.run.app");
+  });
 });

@@ -35,7 +35,7 @@ export function getSupabaseStoragePublicUrl(
 }
 
 export function getNdaGenerationBaseUrl(): string {
-  const configuredBaseUrl = import.meta.env.VITE_NDA_GENERATION_URL?.trim();
+  const configuredBaseUrl = config.NDA_GENERATION_URL?.trim();
   return trimTrailingSlash(
     configuredBaseUrl || DEFAULT_NDA_GENERATION_BASE_URL
   );

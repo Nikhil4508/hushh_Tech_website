@@ -165,7 +165,8 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
       }
     } catch (err: any) {
       // Handle the 402 Payment Required scenario from the service layer
-      if (err?.status === 402 || err?.message?.includes('402')) {
+      // We check for both direct status and nested context status due to ApiClient indirection
+      if (err && (err.status === 402 || err.context?.response?.status === 402 || err.message?.includes('402'))) {
         setMessages(prev => prev.slice(0, -1));
         setInput(text);
         toast({
