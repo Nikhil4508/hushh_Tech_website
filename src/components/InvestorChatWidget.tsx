@@ -148,14 +148,14 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
       const replyTimestamp = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply, timestamp: replyTimestamp }]);
       
-      if (data.accessInfo) {
-        setAccessInfo(prev => ({ ...prev!, ...data.accessInfo }));
+      if (data.accessInfo && accessInfo) {
+        setAccessInfo({ ...accessInfo, ...data.accessInfo });
       } else {
         await checkAccess();
       }
     } catch (err: any) {
       // Handle the 402 Payment Required scenario from the service layer
-      if (err?.status === 402 || err?.message?.includes('402')) {
+      if (err?.context?.status === 402) {
         setMessages(prev => prev.slice(0, -1));
         setInput(text);
         toast({

@@ -3,7 +3,7 @@ import {
   buildWalletCardContentFromPayload,
   getWalletPayloadFieldValue,
   WALLET_CARD_ORGANIZATION_NAME,
-} from "../src/utils/walletPassModel.ts";
+} from "../src/utils/walletPassModel.js"; // Ensure this path points to the compiled JS file
 
 const UPSTREAM_GOOGLE_WALLET_ENDPOINT =
   "https://hushh-wallet.vercel.app/api/passes/google/create";
