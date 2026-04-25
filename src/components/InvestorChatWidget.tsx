@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 import { Settings, Zap, ArrowUp } from 'lucide-react';
-import { getOrCreateVisitorId } from '../utils/visitorId';
 import { ChatPaymentModal } from './ChatPaymentModal';
 import { ChatService, ChatAccessInfo } from '../services/api/chatService';
+import { useAuthSession } from '../auth/AuthSessionProvider';
+import { eventBus, EVENTS } from '../lib/events';
 import hushhLogo from './images/Hushhogo.png';
 
 type Message = { role: 'user' | 'assistant'; content: string; timestamp?: string };
@@ -39,7 +40,7 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [accessInfo, setAccessInfo] = useState<ChatAccessInfo | null>(null);
-  const [visitorId] = useState(() => getOrCreateVisitorId());
+  const { visitorId } = useAuthSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -49,6 +50,13 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
   useEffect(() => {
     checkAccess();
     handlePaymentReturn();
+
+    // Subscribe to payment verified events
+    const unsubscribe = eventBus.subscribe(EVENTS.PAYMENT_VERIFIED, () => {
+      checkAccess();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   // Auto-scroll to bottom when new messages arrive
@@ -87,7 +95,9 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
           status: 'success',
           duration: 5000,
         });
-        await checkAccess();
+        
+        // Broadcast that payment has been verified successfully
+        eventBus.emit(EVENTS.PAYMENT_VERIFIED);
       } catch (err) {
         console.error('Payment verification error:', err);
       }
