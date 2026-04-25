@@ -34,28 +34,21 @@ export class NdaService extends ApiClient {
   /**
    * Check if the specific user has signed the NDA (Legacy RPC support)
    */
-  static async checkNDAStatus(_userId: string): Promise<NDAStatus> {
-      // We proxy this to the modern access status check or implement RPC via invoke if needed
-      // For now, aligning with the modern service pattern
-      try {
-        const status = await this.checkAccessStatus();
-        const approvedStatuses = ["signed", "Approved"];
-        return {
-          hasSignedNda: approvedStatuses.includes(status),
-          signedAt: null,
-          ndaVersion: "v1.0",
-          signerName: null,
-        };
-      } catch (err) {
-        console.error("Error checking NDA status:", err);
-        return {
-          hasSignedNda: false,
-          signedAt: null,
-          ndaVersion: null,
-          signerName: null,
-        };
-      }
+  static async checkNDAStatus(userId: string): Promise<NDAStatus> {
+    // This method provides legacy support by calling the original RPC.
+    // Consider migrating all call sites to use the newer, more abstract service methods.
+    try {
+      return await this.invoke<NDAStatus>("check_user_nda_status", { p_user_id: userId });
+    } catch (err: any) {
+      console.error("Error checking NDA status via legacy RPC:", err);
+      return {
+        hasSignedNda: false,
+        signedAt: null,
+        ndaVersion: null,
+        signerName: null,
+      };
     }
+  }
 
   /**
    * Get the existing NDA metadata for the current user.

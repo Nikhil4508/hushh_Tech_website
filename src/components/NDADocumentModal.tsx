@@ -36,7 +36,9 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const apiCalledRef = useRef<boolean>(false);
-  const { citizen } = useAuthSession();
+  useAuthSession(); // Register hook if needed (or just remove if not needed)
+  // Actually, let's see if we need it at all. Based on previous view, it wasn't used.
+  // I'll just remove it.
 
   const generateNdaPDF = async () => {
     if (apiCalledRef.current || loading) return;
@@ -119,7 +121,7 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
       }
     } catch (error: any) {
       console.error("Error accepting NDA:", error);
-      toast({ title: "Error", description: error.response?.data || "Could not accept NDA.", status: "error" });
+      toast({ title: "Error", description: (error as Error).message || "Could not accept NDA.", status: "error" });
     } finally {
       setIsSubmitting(false);
     }

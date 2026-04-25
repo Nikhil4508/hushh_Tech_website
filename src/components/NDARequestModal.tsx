@@ -150,7 +150,7 @@ const InvestorProfilePage: React.FC<NDARequestModalProps> = ({
       }
     } catch (error: any) {
       console.error("Error submitting request:", error);
-      const errorMessage = error.response?.data?.message || error.response?.data || "Could not submit your NDA request.";
+      const errorMessage = (error as Error).message || "Could not submit your NDA request.";
       toast({ title: "Submission Failed", description: errorMessage, status: "error", duration: 4000, isClosable: true });
     }
   };
