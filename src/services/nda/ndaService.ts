@@ -26,11 +26,6 @@ export interface SignNDAResult {
  */
 export class NdaService extends ApiClient {
   /**
-   * Supabase function URL for NDA notification
-   */
-  private static readonly NDA_NOTIFICATION_FUNCTION_URL = config.NDA_SIGNED_NOTIFICATION_URL || `${config.SUPABASE_URL}/functions/v1/nda-signed-notification`;
-
-  /**
    * Check if the current user has signed the NDA
    */
   static async checkNDAStatus(userId: string): Promise<NDAStatus> {
@@ -197,26 +192,8 @@ export class NdaService extends ApiClient {
         }
       }
 
-      const response = await fetch(this.NDA_NOTIFICATION_FUNCTION_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${config.SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('NDA notification failed:', errorText);
-        return {
-          success: false,
-          error: `Failed to send notification: ${errorText}`,
-        };
-      }
-
-      const result = await response.json();
-      console.log('NDA notification sent successfully:', result);
+      // Call the Supabase Edge Function
+      await this.invoke('nda-signed-notification', payload);
 
       return { success: true };
     } catch (err) {
