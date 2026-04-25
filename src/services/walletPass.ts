@@ -1,7 +1,7 @@
 import {
   buildGoldPassPayload as buildSharedGoldPassPayload,
   buildWalletCardContent,
-} from "../../api/shared/walletPassModel.js";
+} from "../utils/walletPassModel.js";
 
 const HUSHH_WALLET_ENDPOINT = "/api/wallet-pass";
 const HUSHH_GOOGLE_WALLET_ENDPOINT = "/api/google-wallet-pass";

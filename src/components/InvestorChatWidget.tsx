@@ -4,20 +4,10 @@ import ReactMarkdown from 'react-markdown';
 import { Settings, Zap, ArrowUp } from 'lucide-react';
 import { getOrCreateVisitorId } from '../utils/visitorId';
 import { ChatPaymentModal } from './ChatPaymentModal';
+import { ChatService, ChatAccessInfo } from '../services/api/chatService';
 import hushhLogo from './images/Hushhogo.png';
 
 type Message = { role: 'user' | 'assistant'; content: string; timestamp?: string };
-
-interface AccessInfo {
-  canChat: boolean;
-  needsPayment: boolean;
-  accessType: 'free' | 'paid' | 'expired';
-  messagesRemaining?: number | 'unlimited';
-  messagesUsed?: number;
-  totalFreeMessages?: number;
-  timeRemaining?: string;
-  message?: string;
-}
 
 // Hushh Assistant Avatar Component - Uses official Hushh logo
 const HushhAvatar = ({ size = 'md', showOnline = false }: { size?: 'sm' | 'md' | 'lg'; showOnline?: boolean }) => {
@@ -48,7 +38,7 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [accessInfo, setAccessInfo] = useState<AccessInfo | null>(null);
+  const [accessInfo, setAccessInfo] = useState<ChatAccessInfo | null>(null);
   const [visitorId] = useState(() => getOrCreateVisitorId());
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -76,22 +66,8 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
 
   const checkAccess = async () => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-check-access`,
-        {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-          },
-          body: JSON.stringify({ visitorId, slug }),
-        }
-      );
-      
-      if (res.ok) {
-        const data = await res.json();
-        setAccessInfo(data);
-      }
+      const data = await ChatService.checkAccess(visitorId, slug);
+      setAccessInfo(data);
     } catch (err) {
       console.error('Access check error:', err);
     }
@@ -104,27 +80,14 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
 
     if (paymentStatus === 'success' && sessionId) {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-verify-payment`,
-          {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-            },
-            body: JSON.stringify({ sessionId, visitorId, slug }),
-          }
-        );
-
-        if (res.ok) {
-          toast({
-            title: 'Payment Successful!',
-            description: 'You now have unlimited access for 30 minutes.',
-            status: 'success',
-            duration: 5000,
-          });
-          await checkAccess();
-        }
+        await ChatService.verifyPayment(sessionId, visitorId, slug);
+        toast({
+          title: 'Payment Successful!',
+          description: 'You now have unlimited access for 30 minutes.',
+          status: 'success',
+          duration: 5000,
+        });
+        await checkAccess();
       } catch (err) {
         console.error('Payment verification error:', err);
       }
@@ -143,20 +106,8 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
   const handlePayment = async () => {
     setProcessing(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-create-checkout`,
-        {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-          },
-          body: JSON.stringify({ visitorId, slug }),
-        }
-      );
-
-      if (res.ok) {
-        const data = await res.json();
+      const data = await ChatService.createCheckout(visitorId, slug);
+      if (data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
       } else {
         throw new Error('Failed to create checkout session');
@@ -192,39 +143,8 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
     
     try {
       const history = messages.map(m => ({ role: m.role, content: m.content }));
+      const data = await ChatService.sendMessage(slug, text, visitorId, history);
       
-      const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/investor-chat`,
-        {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-          },
-          body: JSON.stringify({ slug, message: text, visitorId, history }),
-        }
-      );
-      
-      if (res.status === 402) {
-        const data = await res.json();
-        setMessages(prev => prev.slice(0, -1));
-        setInput(text);
-        toast({
-          title: 'Payment Required',
-          description: data.message || 'Please pay to continue chatting.',
-          status: 'warning',
-          duration: 5000,
-        });
-        await checkAccess();
-        onOpen();
-        return;
-      }
-
-      if (!res.ok) {
-        throw new Error('Failed to get response');
-      }
-      
-      const data = await res.json();
       const replyTimestamp = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply, timestamp: replyTimestamp }]);
       
@@ -233,7 +153,22 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
       } else {
         await checkAccess();
       }
-    } catch (err) {
+    } catch (err: any) {
+      // Handle the 402 Payment Required scenario from the service layer
+      if (err?.status === 402 || err?.message?.includes('402')) {
+        setMessages(prev => prev.slice(0, -1));
+        setInput(text);
+        toast({
+          title: 'Payment Required',
+          description: 'Please pay to continue chatting.',
+          status: 'warning',
+          duration: 5000,
+        });
+        await checkAccess();
+        onOpen();
+        return;
+      }
+
       console.error(err);
       setMessages(prev => [...prev, { 
         role: 'assistant', 

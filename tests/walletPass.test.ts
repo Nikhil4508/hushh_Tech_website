@@ -17,7 +17,7 @@ import {
   isAppleWalletSupported,
   requestGoogleWalletPass,
 } from "../src/services/walletPass";
-import { buildWalletCardContentFromPayload } from "../api/shared/walletPassModel.js";
+import { buildWalletCardContentFromPayload } from "../src/utils/walletPassModel";
 
 describe("wallet pass service", () => {
   beforeEach(() => {
