@@ -70,7 +70,7 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
     } catch (error: any) {
       console.error("Error generating NDA PDF:", error);
       toast.close(loadingToastId);
-      const errorMessage = error.response?.data?.message || "Failed to generate NDA PDF.";
+      const errorMessage = (error as Error)?.message || "Failed to generate NDA PDF.";
       toast({ title: "Error", description: errorMessage, status: "error", duration: 4000, isClosable: true });
       apiCalledRef.current = false;
     }
