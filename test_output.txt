@@ -1,0 +1,781 @@
+npm warn Unknown cli config "--run". This will stop working in the next major version of npm.
+
+> hushh-technologies@1.3.0 test
+> vitest run
+
+
+ RUN  v1.6.1 /home/monster/Desktop/my-hushh-fork
+
+ ↓ tests/plaidSandboxLive.test.ts  (6 tests | 6 skipped)
+ ✓ tests/locationService.test.ts  (25 tests) 21ms
+ ✓ tests/step6LocationFlow.test.ts  (8 tests | 1 skipped) 16ms
+ ✓ tests/plaidIntegration.test.ts  (21 tests) 50ms
+ ✓ tests/locationRefreshService.test.ts  (5 tests) 39ms
+stderr | tests/auth.test.ts > Auth Flow — getUserDetails (Fixed) > should handle exceptions gracefully
+[AuthSession] Failed to read current session: Error: Network error
+    at /home/monster/Desktop/my-hushh-fork/tests/auth.test.ts:194:38
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+    at withEnv (file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:83:5)
+
+stdout | tests/locationRefreshService.test.ts > LocationService shared refresh flow > mirrors only normalized gps columns when saving location to onboarding
+[LocationService] Location saved to onboarding_data and shared cache
+
+ ✓ tests/nda.test.ts  (46 tests) 46ms
+stderr | tests/locationData.test.ts > locationData - Unit Tests > getStatesOfCountry() > should fallback to countriesnow.space when edge function fails
+[locationData] Edge function failed, trying fallback: Error: Edge function unavailable
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:163:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+
+stderr | tests/locationData.test.ts > locationData - Unit Tests > getStatesOfCountry() > should return empty array when both sources fail
+[locationData] Edge function failed, trying fallback: Error: Edge function down
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:210:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+[locationData] Fallback states fetch failed: Error: Fallback API down
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:211:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+
+stderr | tests/locationData.test.ts > locationData - Unit Tests > getCitiesOfState() > should fallback to countriesnow.space when edge function fails
+[locationData] Edge function failed for cities, trying fallback: Error: Edge function down
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:299:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+
+stderr | tests/locationData.test.ts > locationData - Unit Tests > getCitiesOfState() > should return empty array when both sources fail
+[locationData] Edge function failed for cities, trying fallback: Error: Edge function down
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:325:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+[locationData] Edge function failed, trying fallback: Error: Fallback down
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:326:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+[locationData] Fallback states fetch failed: TypeError: Cannot read properties of undefined (reading 'json')
+    at fetchStatesFromFallback (/home/monster/Desktop/my-hushh-fork/src/data/locationData.ts:344:28)
+[locationData] Fallback cities fetch failed: TypeError: Cannot read properties of undefined (reading 'json')
+    at fetchCitiesFromFallback (/home/monster/Desktop/my-hushh-fork/src/data/locationData.ts:375:28)
+
+stderr | tests/locationData.test.ts > locationData - Unit Tests > getCitiesOfState() > should filter out empty city names from fallback
+[locationData] Edge function failed for cities, trying fallback: Error: Edge down
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:335:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+
+stderr | tests/locationData.test.ts > locationData - Integration Tests > Fallback resilience > should still return data when edge function is completely down
+[locationData] Edge function failed, trying fallback: Error: 503 Service Unavailable
+    at /home/monster/Desktop/my-hushh-fork/tests/locationData.test.ts:461:32
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+
+ ✓ tests/auth.test.ts  (25 tests) 82ms
+ ✓ tests/locationData.test.ts  (28 tests) 299ms
+ ✓ tests/walletApiRoutes.test.ts  (6 tests) 16ms
+ ✓ tests/deleteUserAccountService.test.ts  (3 tests) 14ms
+ ✓ tests/emailTemplateBuilders.test.ts  (4 tests) 9ms
+stderr | readClientEnv (/home/monster/Desktop/my-hushh-fork/src/resources/config/config.ts:25:11)
+[Config] Missing required client environment variable: VITE_SUPABASE_URL
+[Config] Missing required client environment variable: VITE_SUPABASE_ANON_KEY
+
+stderr | readClientEnv (/home/monster/Desktop/my-hushh-fork/src/resources/config/config.ts:25:11)
+[Config] Missing required client environment variable: VITE_SUPABASE_URL
+[Config] Missing required client environment variable: VITE_SUPABASE_ANON_KEY
+
+ ✓ tests/addressNormalization.test.ts  (5 tests) 9ms
+ ✓ tests/onboardingPrefill.test.ts  (4 tests) 9ms
+ ✓ tests/step3AddressLogic.test.ts  (5 tests) 10ms
+ ✓ tests/googleWalletLocalRoute.test.ts  (1 test) 24ms
+ ✓ tests/metricsSendReportRoute.test.ts  (2 tests) 27ms
+ ✓ tests/deleteAccountShared.test.ts  (3 tests) 30ms
+ ✓ tests/publicInvestorProfileApiRoute.test.ts  (3 tests) 6ms
+ ✓ tests/oauthStart.test.ts  (3 tests) 11ms
+ ✓ tests/nwsScoreNotification.test.ts  (11 tests | 10 skipped) 1350ms
+stderr | readClientEnv (/home/monster/Desktop/my-hushh-fork/src/resources/config/config.ts:25:11)
+[Config] Missing required client environment variable: VITE_SUPABASE_URL
+[Config] Missing required client environment variable: VITE_SUPABASE_ANON_KEY
+
+ ✓ tests/coinsCreditNotification.test.ts  (9 tests | 8 skipped) 1356ms
+ ✓ tests/publicInvestorProfileService.test.ts  (3 tests) 12ms
+ ✓ tests/locationSharedCache.test.ts  (3 tests) 10ms
+stderr | tests/deleteAccountApiRoute.test.ts > delete-account API route > fails closed when the server env is missing
+delete-account route error: Supabase server environment variables are missing
+
+ ✓ tests/deleteAccountApiRoute.test.ts  (3 tests) 15ms
+ ✓ tests/coinsDeductionNotification.test.ts  (9 tests | 8 skipped) 1570ms
+ ✓ tests/metricsSummaryRoute.test.ts  (2 tests) 37ms
+ ✓ tests/ndaNotification.test.ts  (8 tests | 7 skipped) 1266ms
+ ✓ tests/publicInvestorProfileSqlContract.test.ts  (3 tests) 8ms
+ ✓ tests/analyticsRealtimeRoute.test.ts  (2 tests) 45ms
+ ✓ tests/emailMime.test.ts  (2 tests) 17ms
+stderr | readClientEnv (/home/monster/Desktop/my-hushh-fork/src/resources/config/config.ts:25:11)
+[Config] Missing required client environment variable: VITE_SUPABASE_URL
+[Config] Missing required client environment variable: VITE_SUPABASE_ANON_KEY
+
+ ✓ tests/clientConfig.test.ts  (3 tests) 21ms
+ ✓ tests/authHost.test.ts  (5 tests) 13ms
+stderr | tests/chatService.test.ts > ChatService > should handle errors from invoke
+[ApiClient] Error invoking chat-check-access: Error: Functions error
+    at /home/monster/Desktop/my-hushh-fork/tests/chatService.test.ts:56:23
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/monster/Desktop/my-hushh-fork/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+    at withEnv (file:///home/monster/Desktop/my-hushh-fork/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:83:5)
+
+ ✓ tests/chatService.test.ts  (3 tests) 34ms
+ ✓ tests/onboardingFlow.test.ts  (3 tests) 5ms
+ ✓ tests/mainWebRuntime.test.ts  (3 tests) 6ms
+ ✓ tests/plaidRedirect.test.ts  (3 tests) 6ms
+ ✓ tests/emailInlineAssets.test.ts  (1 test) 24ms
+ ↓ tests/step4LocationLogic.test.ts  (1 test | 1 skipped)
+ ✓ tests/deleteAccountPageCopy.test.ts  (1 test) 34ms
+stderr | readClientEnv (/home/monster/Desktop/my-hushh-fork/src/resources/config/config.ts:25:11)
+[Config] Missing required client environment variable: VITE_SUPABASE_URL
+[Config] Missing required client environment variable: VITE_SUPABASE_ANON_KEY
+
+ ✓ tests/step6DobLogic.test.ts  (4 tests) 8ms
+ ✓ tests/metricsService.test.ts  (2 tests) 18ms
+ ✓ tests/walletPass.test.ts  (7 tests) 54ms
+stderr | readClientEnv (/home/monster/Desktop/my-hushh-fork/src/resources/config/config.ts:25:11)
+[Config] Missing required client environment variable: VITE_SUPABASE_URL
+[Config] Missing required client environment variable: VITE_SUPABASE_ANON_KEY
+
+ ❯ tests/deleteAccountModal.test.ts  (3 tests | 3 failed) 46ms
+   ❯ tests/deleteAccountModal.test.ts > DeleteAccountModal > shows the hard-delete payment-audit policy in the modal copy
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/deleteAccountModal.test.ts > DeleteAccountModal > only completes the flow when the backend returns success: true
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/deleteAccountModal.test.ts > DeleteAccountModal > does not navigate away on a malformed success response
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ❯ tests/authSessionProvider.test.ts  (9 tests | 8 failed | 1 skipped) 48ms
+   ❯ tests/authSessionProvider.test.ts > AuthSessionProvider > authenticates a valid persisted session
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > AuthSessionProvider > broadcast-driven deletion invalidates another tab immediately
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > AuthSessionProvider > starts unified Google OAuth from the provider action
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > HushhTechNavDrawer auth gating > shows guest actions and hides account actions when no session exists
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > HushhTechNavDrawer auth gating > shows account actions for authenticated users and logout performs a real sign-out
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > auth-aware guest routing > shows a Log In footer tab for guests and routes it to the profile login redirect
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > auth-aware guest routing > redirects guests away from /profile to /login with the route preserved
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/authSessionProvider.test.ts > auth-aware guest routing > redirects guests away from /delete-account to /login with the route preserved
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ❯ tests/loginSignupOAuth.test.ts  (4 tests | 4 failed) 22ms
+   ❯ tests/loginSignupOAuth.test.ts > login/signup OAuth UI > shows an inline login error and re-enables the buttons when OAuth start fails
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/loginSignupOAuth.test.ts > login/signup OAuth UI > shows a visible loading state while auth bootstrap is still booting
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/loginSignupOAuth.test.ts > login/signup OAuth UI > redirects unsupported login hosts before rendering sign-in CTAs
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/loginSignupOAuth.test.ts > login/signup OAuth UI > redirects unsupported signup hosts before rendering sign-up CTAs
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ❯ tests/protectedRoute.test.ts  (2 tests | 2 failed) 19ms
+   ❯ tests/protectedRoute.test.ts > ProtectedRoute > keeps showing the loading state while auth is booting
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/protectedRoute.test.ts > ProtectedRoute > allows the investor-profile alias once the financial-link gate is cleared
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ✓ tests/googleAnalytics.test.ts  (2 tests) 60ms
+ ❯ tests/walletPreviewModal.test.ts  (4 tests | 4 failed) 15ms
+   ❯ tests/walletPreviewModal.test.ts > WalletCardPreviewModal > shows Apple add action when Apple Wallet is supported
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/walletPreviewModal.test.ts > WalletCardPreviewModal > shows helper copy instead of the Apple add action when unsupported
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/walletPreviewModal.test.ts > WalletCardPreviewModal > keeps the card bounded and shortens long membership ids only inside the preview card
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/walletPreviewModal.test.ts > WalletCardPreviewModal > renders the profile tile as unavailable when there is no slug-backed public URL
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ❯ tests/authCallback.test.ts  (1 test | 1 failed) 9ms
+   ❯ tests/authCallback.test.ts > AuthCallback > always exchanges the returned OAuth code even if a stale session already exists
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ❯ tests/publicInvestorProfilePage.test.ts  (2 tests | 2 failed) 11ms
+   ❯ tests/publicInvestorProfilePage.test.ts > PublicInvestorProfilePage > shows full names and verified copy for confirmed public profiles
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+   ❯ tests/publicInvestorProfilePage.test.ts > PublicInvestorProfilePage > shows basic shared pages for unconfirmed public profiles without verified copy
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+ ❯ tests/investorProfileWalletUi.test.ts  (1 test | 1 failed) 9ms
+   ❯ tests/investorProfileWalletUi.test.ts > InvestorProfile wallet UI > renders preview and disables unsupported wallet actions with notes
+     → act(...) is not supported in production builds of React.
+     → act(...) is not supported in production builds of React.
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 25 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/authCallback.test.ts > AuthCallback > always exchanges the returned OAuth code even if a stale session already exists
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authCallback.test.ts:111:11
+    109|     const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    110| 
+    111|     await act(async () => {
+       |           ^
+    112|       root.render(
+    113|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/50]⎯
+
+ FAIL  tests/authCallback.test.ts > AuthCallback > always exchanges the returned OAuth code even if a stale session already exists
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authCallback.test.ts:101:11
+     99| 
+    100|   afterEach(async () => {
+    101|     await act(async () => {
+       |           ^
+    102|       root.unmount();
+    103|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > AuthSessionProvider > authenticates a valid persisted session
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:149:11
+    147|     });
+    148| 
+    149|     await act(async () => {
+       |           ^
+    150|       root.render(renderWithProvider(React.createElement(AuthHarness))…
+    151|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > AuthSessionProvider > authenticates a valid persisted session
+ FAIL  tests/authSessionProvider.test.ts > AuthSessionProvider > broadcast-driven deletion invalidates another tab immediately
+ FAIL  tests/authSessionProvider.test.ts > AuthSessionProvider > starts unified Google OAuth from the provider action
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:133:11
+    131| 
+    132|   afterEach(async () => {
+    133|     await act(async () => {
+       |           ^
+    134|       root.unmount();
+    135|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > AuthSessionProvider > broadcast-driven deletion invalidates another tab immediately
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:197:11
+    195|     });
+    196| 
+    197|     await act(async () => {
+       |           ^
+    198|       root.render(renderWithProvider(React.createElement(AuthHarness))…
+    199|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > AuthSessionProvider > starts unified Google OAuth from the provider action
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:238:11
+    236|     });
+    237| 
+    238|     await act(async () => {
+       |           ^
+    239|       root.render(renderWithProvider(React.createElement(AuthHarness))…
+    240|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > HushhTechNavDrawer auth gating > shows guest actions and hides account actions when no session exists
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:301:11
+    299|     });
+    300| 
+    301|     await act(async () => {
+       |           ^
+    302|       root.render(
+    303|         renderWithProvider(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > HushhTechNavDrawer auth gating > shows guest actions and hides account actions when no session exists
+ FAIL  tests/authSessionProvider.test.ts > HushhTechNavDrawer auth gating > shows account actions for authenticated users and logout performs a real sign-out
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:285:11
+    283| 
+    284|   afterEach(async () => {
+    285|     await act(async () => {
+       |           ^
+    286|       root.unmount();
+    287|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > HushhTechNavDrawer auth gating > shows account actions for authenticated users and logout performs a real sign-out
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:334:11
+    332|     });
+    333| 
+    334|     await act(async () => {
+       |           ^
+    335|       root.render(
+    336|         renderWithProvider(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > auth-aware guest routing > shows a Log In footer tab for guests and routes it to the profile login redirect
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:408:11
+    406|     });
+    407| 
+    408|     await act(async () => {
+       |           ^
+    409|       root.render(
+    410|         renderWithProvider(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > auth-aware guest routing > shows a Log In footer tab for guests and routes it to the profile login redirect
+ FAIL  tests/authSessionProvider.test.ts > auth-aware guest routing > redirects guests away from /profile to /login with the route preserved
+ FAIL  tests/authSessionProvider.test.ts > auth-aware guest routing > redirects guests away from /delete-account to /login with the route preserved
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:392:11
+    390| 
+    391|   afterEach(async () => {
+    392|     await act(async () => {
+       |           ^
+    393|       root.unmount();
+    394|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > auth-aware guest routing > redirects guests away from /profile to /login with the route preserved
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:454:11
+    452|     });
+    453| 
+    454|     await act(async () => {
+       |           ^
+    455|       root.render(
+    456|         renderWithProvider(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/50]⎯
+
+ FAIL  tests/authSessionProvider.test.ts > auth-aware guest routing > redirects guests away from /delete-account to /login with the route preserved
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/authSessionProvider.test.ts:497:11
+    495|     });
+    496| 
+    497|     await act(async () => {
+       |           ^
+    498|       root.render(
+    499|         renderWithProvider(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/50]⎯
+
+ FAIL  tests/deleteAccountModal.test.ts > DeleteAccountModal > shows the hard-delete payment-audit policy in the modal copy
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/deleteAccountModal.test.ts:90:11
+     88| 
+     89|   async function renderModal(onAccountDeleted = vi.fn()) {
+     90|     await act(async () => {
+       |           ^
+     91|       root.render(
+     92|         React.createElement(DeleteAccountModal, {
+ ❯ tests/deleteAccountModal.test.ts:131:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/50]⎯
+
+ FAIL  tests/deleteAccountModal.test.ts > DeleteAccountModal > shows the hard-delete payment-audit policy in the modal copy
+ FAIL  tests/deleteAccountModal.test.ts > DeleteAccountModal > only completes the flow when the backend returns success: true
+ FAIL  tests/deleteAccountModal.test.ts > DeleteAccountModal > does not navigate away on a malformed success response
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/deleteAccountModal.test.ts:80:11
+     78| 
+     79|   afterEach(async () => {
+     80|     await act(async () => {
+       |           ^
+     81|       root.unmount();
+     82|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/50]⎯
+
+ FAIL  tests/deleteAccountModal.test.ts > DeleteAccountModal > only completes the flow when the backend returns success: true
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/deleteAccountModal.test.ts:90:11
+     88| 
+     89|   async function renderModal(onAccountDeleted = vi.fn()) {
+     90|     await act(async () => {
+       |           ^
+     91|       root.render(
+     92|         React.createElement(DeleteAccountModal, {
+ ❯ tests/deleteAccountModal.test.ts:138:36
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/50]⎯
+
+ FAIL  tests/deleteAccountModal.test.ts > DeleteAccountModal > does not navigate away on a malformed success response
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/deleteAccountModal.test.ts:90:11
+     88| 
+     89|   async function renderModal(onAccountDeleted = vi.fn()) {
+     90|     await act(async () => {
+       |           ^
+     91|       root.render(
+     92|         React.createElement(DeleteAccountModal, {
+ ❯ tests/deleteAccountModal.test.ts:173:36
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/50]⎯
+
+ FAIL  tests/investorProfileWalletUi.test.ts > InvestorProfile wallet UI > renders preview and disables unsupported wallet actions with notes
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/investorProfileWalletUi.test.ts:80:11
+     78| 
+     79|   it("renders preview and disables unsupported wallet actions with not…
+     80|     await act(async () => {
+       |           ^
+     81|       root.render(
+     82|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/50]⎯
+
+ FAIL  tests/investorProfileWalletUi.test.ts > InvestorProfile wallet UI > renders preview and disables unsupported wallet actions with notes
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/investorProfileWalletUi.test.ts:72:11
+     70| 
+     71|   afterEach(async () => {
+     72|     await act(async () => {
+       |           ^
+     73|       root.unmount();
+     74|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/50]⎯
+
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > shows an inline login error and re-enables the buttons when OAuth start fails
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/loginSignupOAuth.test.ts:89:11
+     87|     });
+     88| 
+     89|     await act(async () => {
+       |           ^
+     90|       root.render(
+     91|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/50]⎯
+
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > shows an inline login error and re-enables the buttons when OAuth start fails
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > shows a visible loading state while auth bootstrap is still booting
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > redirects unsupported login hosts before rendering sign-in CTAs
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > redirects unsupported signup hosts before rendering sign-up CTAs
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/loginSignupOAuth.test.ts:75:11
+     73| 
+     74|   afterEach(async () => {
+     75|     await act(async () => {
+       |           ^
+     76|       root.unmount();
+     77|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/50]⎯
+
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > shows a visible loading state while auth bootstrap is still booting
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/loginSignupOAuth.test.ts:120:11
+    118|     authState.status = "booting";
+    119| 
+    120|     await act(async () => {
+       |           ^
+    121|       root.render(
+    122|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/50]⎯
+
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > redirects unsupported login hosts before rendering sign-in CTAs
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/loginSignupOAuth.test.ts:146:11
+    144|     });
+    145| 
+    146|     await act(async () => {
+       |           ^
+    147|       root.render(
+    148|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/50]⎯
+
+ FAIL  tests/loginSignupOAuth.test.ts > login/signup OAuth UI > redirects unsupported signup hosts before rendering sign-up CTAs
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/loginSignupOAuth.test.ts:176:11
+    174|     });
+    175| 
+    176|     await act(async () => {
+       |           ^
+    177|       root.render(
+    178|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/50]⎯
+
+ FAIL  tests/protectedRoute.test.ts > ProtectedRoute > keeps showing the loading state while auth is booting
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/protectedRoute.test.ts:64:11
+     62| 
+     63|   it("keeps showing the loading state while auth is booting", async ()…
+     64|     await act(async () => {
+       |           ^
+     65|       root.render(
+     66|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/50]⎯
+
+ FAIL  tests/protectedRoute.test.ts > ProtectedRoute > keeps showing the loading state while auth is booting
+ FAIL  tests/protectedRoute.test.ts > ProtectedRoute > allows the investor-profile alias once the financial-link gate is cleared
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/protectedRoute.test.ts:57:11
+     55| 
+     56|   afterEach(async () => {
+     57|     await act(async () => {
+       |           ^
+     58|       root.unmount();
+     59|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/50]⎯
+
+ FAIL  tests/protectedRoute.test.ts > ProtectedRoute > allows the investor-profile alias once the financial-link gate is cleared
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/protectedRoute.test.ts:100:11
+     98|     });
+     99| 
+    100|     await act(async () => {
+       |           ^
+    101|       root.render(
+    102|         React.createElement(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/50]⎯
+
+ FAIL  tests/publicInvestorProfilePage.test.ts > PublicInvestorProfilePage > shows full names and verified copy for confirmed public profiles
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderPage tests/publicInvestorProfilePage.test.ts:78:11
+     76| 
+     77|   const renderPage = async (slug: string) => {
+     78|     await act(async () => {
+       |           ^
+     79|       root.render(
+     80|         React.createElement(
+ ❯ tests/publicInvestorProfilePage.test.ts:178:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/50]⎯
+
+ FAIL  tests/publicInvestorProfilePage.test.ts > PublicInvestorProfilePage > shows full names and verified copy for confirmed public profiles
+ FAIL  tests/publicInvestorProfilePage.test.ts > PublicInvestorProfilePage > shows basic shared pages for unconfirmed public profiles without verified copy
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/publicInvestorProfilePage.test.ts:146:11
+    144| 
+    145|   afterEach(async () => {
+    146|     await act(async () => {
+       |           ^
+    147|       root.unmount();
+    148|       vi.runOnlyPendingTimers();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/50]⎯
+
+ FAIL  tests/publicInvestorProfilePage.test.ts > PublicInvestorProfilePage > shows basic shared pages for unconfirmed public profiles without verified copy
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderPage tests/publicInvestorProfilePage.test.ts:78:11
+     76| 
+     77|   const renderPage = async (slug: string) => {
+     78|     await act(async () => {
+       |           ^
+     79|       root.render(
+     80|         React.createElement(
+ ❯ tests/publicInvestorProfilePage.test.ts:204:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/50]⎯
+
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > shows Apple add action when Apple Wallet is supported
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/walletPreviewModal.test.ts:114:11
+    112|     overrides: Partial<WalletCardPreviewModalProps> = {}
+    113|   ) => {
+    114|     await act(async () => {
+       |           ^
+    115|       root.render(
+    116|         React.createElement(
+ ❯ tests/walletPreviewModal.test.ts:153:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/50]⎯
+
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > shows Apple add action when Apple Wallet is supported
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > shows helper copy instead of the Apple add action when unsupported
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > keeps the card bounded and shortens long membership ids only inside the preview card
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > renders the profile tile as unavailable when there is no slug-backed public URL
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ tests/walletPreviewModal.test.ts:145:11
+    143| 
+    144|   afterEach(async () => {
+    145|     await act(async () => {
+       |           ^
+    146|       root.unmount();
+    147|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/50]⎯
+
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > shows helper copy instead of the Apple add action when unsupported
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/walletPreviewModal.test.ts:114:11
+    112|     overrides: Partial<WalletCardPreviewModalProps> = {}
+    113|   ) => {
+    114|     await act(async () => {
+       |           ^
+    115|       root.render(
+    116|         React.createElement(
+ ❯ tests/walletPreviewModal.test.ts:176:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/50]⎯
+
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > keeps the card bounded and shortens long membership ids only inside the preview card
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/walletPreviewModal.test.ts:114:11
+    112|     overrides: Partial<WalletCardPreviewModalProps> = {}
+    113|   ) => {
+    114|     await act(async () => {
+       |           ^
+    115|       root.render(
+    116|         React.createElement(
+ ❯ tests/walletPreviewModal.test.ts:189:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/50]⎯
+
+ FAIL  tests/walletPreviewModal.test.ts > WalletCardPreviewModal > renders the profile tile as unavailable when there is no slug-backed public URL
+Error: act(...) is not supported in production builds of React.
+ ❯ Proxy.X node_modules/react/cjs/react.production.min.js:19:136
+ ❯ renderModal tests/walletPreviewModal.test.ts:114:11
+    112|     overrides: Partial<WalletCardPreviewModalProps> = {}
+    113|   ) => {
+    114|     await act(async () => {
+       |           ^
+    115|       root.render(
+    116|         React.createElement(
+ ❯ tests/walletPreviewModal.test.ts:256:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/50]⎯
+
+ Test Files  8 failed | 41 passed | 2 skipped (51)
+      Tests  25 failed | 255 passed | 42 skipped (322)
+   Start at  15:05:33
+   Duration  6.95s (transform 3.75s, setup 9ms, collect 13.39s, tests 6.87s, environment 16.24s, prepare 11.01s)
+
