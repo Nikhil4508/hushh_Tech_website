@@ -88,27 +88,26 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
 
     if (paymentStatus === 'success' && sessionId) {
       try {
-        try {
-          await ChatService.verifyPayment(sessionId, visitorId, slug);
-          toast({
-            title: 'Payment Successful!',
-            description: 'You now have unlimited access for 30 minutes.',
-            status: 'success',
-            duration: 5000,
-          });
-  
-          // Broadcast that payment has been verified successfully
-          eventBus.emit(EVENTS.PAYMENT_VERIFIED);
-        } catch (err) {
-          console.error('Payment verification error:', err);
-          toast({
-            title: 'Payment Verification Failed',
-            description: 'We were unable to verify your payment. Please contact support if this issue persists.',
-            status: 'error',
-            duration: 9000,
-            isClosable: true,
-          });
-        }
+        await ChatService.verifyPayment(sessionId, visitorId, slug);
+        toast({
+          title: 'Payment Successful!',
+          description: 'You now have unlimited access for 30 minutes.',
+          status: 'success',
+          duration: 5000,
+        });
+
+        // Broadcast that payment has been verified successfully
+        eventBus.emit(EVENTS.PAYMENT_VERIFIED);
+      } catch (err) {
+        console.error('Payment verification error:', err);
+        toast({
+          title: 'Payment Verification Failed',
+          description: 'We were unable to verify your payment. Please contact support if this issue persists.',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      }
       window.history.replaceState({}, '', window.location.pathname);
     } else if (paymentStatus === 'cancel') {
       toast({
