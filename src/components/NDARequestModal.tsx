@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from "react";
 import {
   Box,
@@ -18,166 +16,124 @@ import {
   Input,
   Flex,
   Checkbox,
-  Textarea,
 } from "@chakra-ui/react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { requestFileAccess } from "../services/access/accessControlApi";
+import { NdaService } from "../services/api/ndaService";
+import { NdaRequestSchema } from "../services/api/ndaSchema";
 
 interface NDARequestModalProps {
-  session: any; // Contains the logged-in user's session (including access_token)
   onSubmit: (result: string) => void;
-  isOpen?: boolean; // Optional property for when used in a modal context
-  onClose?: () => void; // Optional property for when used in a modal context
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-// Format a given phone number string into international format with a space between the country code and the rest.
-// If the number does not start with a '+', one is added. Then, using libphonenumber-js, we format it.
+// Format a given phone number string into international format
 const formatPhoneNumber = (phone: string): string => {
-  // Ensure the number starts with a plus sign.
   if (!phone.startsWith("+")) {
     phone = `+${phone}`;
   }
   const phoneNumber = parsePhoneNumberFromString(phone);
-  if (phoneNumber) {
-    // formatInternational() returns a string like "+91 9876543210"
-    return phoneNumber.formatInternational();
-  }
-  return phone;
-};
-
-// Basic email validation regex
-const validateEmail = (email: string) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
+  return phoneNumber ? phoneNumber.formatInternational() : phone;
 };
 
 const InvestorProfilePage: React.FC<NDARequestModalProps> = ({
-  session,
   onSubmit,
   isOpen,
   onClose,
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [investorType, setInvestorType] = useState("Individual");
+  const [investorType, setInvestorType] = useState<"Individual" | "Organisation">("Individual");
   const [metadata, setMetadata] = useState<any>({});
-  const [formErrors, setFormErrors] = useState<any>({});
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [ndaConfirmed, setNdaConfirmed] = useState(false);
   const [ndaTermsAccepted, setNdaTermsAccepted] = useState(false);
-  const [showNdaDocModal, setShowNdaDocModal] = useState(false);
   const toast = useToast();
 
-  // Handle modal close if component is used as a modal
   const handleClose = () => {
-    if (onClose) {
-      onClose();
-    }
+    if (onClose) onClose();
   };
 
   const handleInputChange = (field: string, value: string) => {
     setMetadata((prev: any) => ({ ...prev, [field]: value }));
-    // Clear error for the field being changed
     if (formErrors[field]) {
-      setFormErrors((prevErrors: any) => ({ ...prevErrors, [field]: null }));
+      setFormErrors((prevErrors) => {
+        const next = { ...prevErrors };
+        delete next[field];
+        return next;
+      });
     }
   };
 
   const validateStep1 = () => {
-    const errors: any = {};
-    if (investorType === "Individual") {
-      if (!metadata.name?.trim()) errors.name = "Full Name is required.";
-      if (!metadata.state?.trim()) errors.state = "State for taxation is required.";
-      if (!metadata.city?.trim()) errors.city = "City for taxation is required.";
-      if (!metadata.country?.trim()) errors.country = "Country for taxation is required.";
-      if (!metadata.individual_address?.trim()) errors.individual_address = "Residential Address is required.";
-      if (!metadata.legal_email?.trim()) {
-        errors.legal_email = "Legal Email is required.";
-      } else if (!validateEmail(metadata.legal_email)) {
-        errors.legal_email = "Invalid email format.";
-      }
-      // For PhoneInput, check if the value (which includes country code) is more than just the country code or empty
-      if (!metadata.mobile_telephone || metadata.mobile_telephone.length <= 3) { // Basic check, adjust length as needed for country codes
-        errors.mobile_telephone = "Mobile Telephone is required.";
-      }
-    } else if (investorType === "Organisation") {
-      if (!metadata.company_name?.trim()) errors.company_name = "Company Name is required.";
-      if (!metadata.state_of_incorporation?.trim()) errors.state_of_incorporation = "State of Incorporation is required.";
-      // company_address is optional
-      if (!metadata.company_email?.trim()) {
-        errors.company_email = "Company Email is required.";
-      } else if (!validateEmail(metadata.company_email)) {
-        errors.company_email = "Invalid company email format.";
-      }
-      if (!metadata.contact_person_name?.trim()) errors.contact_person_name = "Contact Person Name is required.";
-      if (!metadata.contact_person_title?.trim()) errors.contact_person_title = "Contact Person Title is required.";
-      if (!metadata.contact_person_email?.trim()) {
-        errors.contact_person_email = "Contact Person Email is required.";
-      } else if (!validateEmail(metadata.contact_person_email)) {
-        errors.contact_person_email = "Invalid contact person email format.";
-      }
-      if (!metadata.contact_person_telephone || metadata.contact_person_telephone.length <= 3) {
-        errors.contact_person_telephone = "Contact Person Telephone is required.";
-      }
+    // Basic formatting for phone before validation
+    const dataToValidate = { ...metadata };
+    if (dataToValidate.mobile_telephone) {
+      dataToValidate.mobile_telephone = formatPhoneNumber(dataToValidate.mobile_telephone);
     }
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+    if (dataToValidate.contact_person_telephone) {
+      dataToValidate.contact_person_telephone = formatPhoneNumber(dataToValidate.contact_person_telephone);
+    }
+
+    const result = NdaRequestSchema.safeParse({
+      investorType,
+      metadata: dataToValidate,
+    });
+
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[issue.path.length - 1];
+        if (path) errors[path.toString()] = issue.message;
+      });
+      setFormErrors(errors);
+      return false;
+    }
+
+    setFormErrors({});
+    return true;
   };
 
   const goToStep = (step: number) => {
-    if (step === 2) {
-      if (!validateStep1()) {
-        toast({
-          title: "Validation Error",
-          description: "Please correct the errors in the form before proceeding.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-        });
-        return;
-      }
+    if (step === 2 && !validateStep1()) {
+      toast({
+        title: "Validation Error",
+        description: "Please correct the errors in the form before proceeding.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
     }
     setCurrentStep(step);
   };
 
   const handleSubmit = async () => {
-    // Ensure Step 1 was valid (though goToStep should have caught this)
-    if (!validateStep1() && currentStep === 1) { // Should not happen if goToStep(2) was used
-        toast({ title: "Error", description: "Please complete investor profile first.", status: "error" });
-        setCurrentStep(1); // Force back to step 1
-        return;
-    }
-    if (!ndaConfirmed || !ndaTermsAccepted) {
-        toast({ title: "NDA Acceptance Required", description: "Please confirm and accept NDA terms.", status: "warning" });
-        return;
+    if (currentStep === 1 && !validateStep1()) {
+      toast({ title: "Error", description: "Please complete investor profile first.", status: "error" });
+      return;
     }
 
-    console.log("Submitting NDA Request with metadata:", metadata);
+    if (!ndaConfirmed || !ndaTermsAccepted) {
+      toast({ title: "NDA Acceptance Required", description: "Please confirm and accept NDA terms.", status: "warning" });
+      return;
+    }
+
     const formattedMetadata = { ...metadata };
     if (formattedMetadata.mobile_telephone) {
-      formattedMetadata.mobile_telephone = formatPhoneNumber(
-        formattedMetadata.mobile_telephone
-      );
+      formattedMetadata.mobile_telephone = formatPhoneNumber(formattedMetadata.mobile_telephone);
     }
     if (formattedMetadata.contact_person_telephone) {
-      formattedMetadata.contact_person_telephone = formatPhoneNumber(
-        formattedMetadata.contact_person_telephone
-      );
+      formattedMetadata.contact_person_telephone = formatPhoneNumber(formattedMetadata.contact_person_telephone);
     }
-    try {
-      const resData = await requestFileAccess(session.access_token, {
-        investorType,
-        metadata: JSON.stringify(formattedMetadata),
-      });
 
-      console.log("Request Access Response:", resData);
-      
-      // Toast messages based on response (existing logic)
+    try {
+      const resData = await NdaService.requestFileAccess(investorType, formattedMetadata);
+
       if (resData === "Approved" || (typeof resData === "string" && resData.startsWith("Requested permission"))) {
         toast({ title: "Request Submitted", description: "Your access request has been sent and is pending approval.", status: "success", duration: 4000, isClosable: true });
-        window.location.href = "/"; // Or a more appropriate page
-        
-        // Close modal if applicable after successful submission
+        window.location.href = "/";
         handleClose();
       } else if (resData === "Rejected") {
         toast({ title: "Request Rejected", description: "Your request was rejected. Please re-apply after 2-3 days.", status: "error", duration: 4000, isClosable: true });
@@ -185,35 +141,17 @@ const InvestorProfilePage: React.FC<NDARequestModalProps> = ({
         toast({ title: "Request Pending", description: "Your request is still under review.", status: "info", duration: 4000, isClosable: true });
         onSubmit(resData);
       } else if (resData === "Pending: Waiting for NDA Process") {
-        toast({ 
-          title: "NDA Process Required", 
-          description: "Please complete the NDA process to proceed.", 
-          status: "warning", 
-          duration: 4000, 
-          isClosable: true 
-        });
-        
-        // Pass the metadata for NDA generation and open NDA Document Modal
-        onSubmit(resData); // First notify parent component of the status change
-        
-        // Redirect to profile page where NDA document modal can be shown
-        // The profile page will handle showing the NDA document modal based on the status
+        toast({ title: "NDA Process Required", description: "Please complete the NDA process to proceed.", status: "warning", duration: 4000, isClosable: true });
+        onSubmit(resData);
         window.location.href = "/profile";
       } else {
         toast({ title: "Unexpected Response", description: `Received: ${resData}`, status: "error", duration: 4000, isClosable: true });
         onSubmit(resData);
       }
-
     } catch (error: any) {
       console.error("Error submitting request:", error);
       const errorMessage = error.response?.data?.message || error.response?.data || "Could not submit your NDA request.";
-      toast({
-        title: "Submission Failed",
-        description: errorMessage,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
+      toast({ title: "Submission Failed", description: errorMessage, status: "error", duration: 4000, isClosable: true });
     }
   };
 
@@ -256,7 +194,7 @@ const InvestorProfilePage: React.FC<NDARequestModalProps> = ({
       <VStack spacing={6} align="stretch" w="100%" maxW="600px" mx="auto">
         <FormControl isRequired>
           <FormLabel fontWeight="medium" fontSize={'xl'} color="gray.700">Investor Type</FormLabel>
-          <RadioGroup onChange={(value) => { setInvestorType(value); setMetadata({}); setFormErrors({}); }} value={investorType} mt={2}>
+          <RadioGroup onChange={(value) => { setInvestorType(value as "Individual" | "Organisation"); setMetadata({}); setFormErrors({}); }} value={investorType} mt={2}>
             <HStack spacing={6}>
               <Radio value="Individual" colorScheme="cyan" size="md"><Text ml={1}>Individual</Text></Radio>
               <Radio value="Organisation" colorScheme="cyan" size="md"><Text ml={1}>Organisation</Text></Radio>

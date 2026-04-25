@@ -13,7 +13,7 @@ export class ApiClient {
    */
   protected static async invoke<T = any>(
     functionName: string,
-    body: any
+    body?: any
   ): Promise<T> {
     const { data, error } = await supabase.functions.invoke(functionName, {
       body,

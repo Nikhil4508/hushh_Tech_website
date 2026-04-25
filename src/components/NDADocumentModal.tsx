@@ -14,13 +14,13 @@ import {
   Checkbox,
   Text,
 } from "@chakra-ui/react";
-import { acceptNda, generateNdaPdfBlob } from "../services/access/accessControlApi";
+import { useAuthSession } from "../auth/AuthSessionProvider";
+import { NdaService } from "../services/api/ndaService";
 
 interface NDADocumentModalProps {
   isOpen: boolean;
   onClose: () => void;
   ndaMetadata: any;
-  session: any;
   onAccept: () => void;
 }
 
@@ -28,7 +28,6 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
   isOpen,
   onClose,
   ndaMetadata,
-  session,
   onAccept,
 }) => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -36,15 +35,12 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
   const [confirmed, setConfirmed] = useState<boolean>(false);
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  // Use a ref to track if the PDF generation API has been called
   const apiCalledRef = useRef<boolean>(false);
+  const { citizen } = useAuthSession();
 
-  // Generate NDA PDF and create a blob URL.
   const generateNdaPDF = async () => {
-    // If API has already been called or if we're already loading, don't call again
     if (apiCalledRef.current || loading) return;
     
-    // Mark that we've called the API
     apiCalledRef.current = true;
     setLoading(true);
     
@@ -52,27 +48,17 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
       title: "Generating NDA Document",
       description: "Please wait while we prepare your NDA document...",
       status: "loading",
-      duration: null, // No auto-dismiss
+      duration: null,
       isClosable: false,
     });
     
     try {
-      console.log("Generating NDA PDF with metadata:", ndaMetadata);
-      
-      const responseBlob = await generateNdaPdfBlob(
-        session.access_token,
-        ndaMetadata
-      );
-      
-      // Close the loading toast
+      const responseBlob = await NdaService.generateNdaPdfBlob(ndaMetadata);
       toast.close(loadingToastId);
       
-      // Create a Blob URL from the response data
       const blob = new Blob([responseBlob], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       setPdfUrl(url);
-      
-      console.log("NDA PDF generated successfully");
       
       toast({
         title: "Document Ready",
@@ -83,54 +69,21 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
       });
     } catch (error: any) {
       console.error("Error generating NDA PDF:", error);
-      
-      // Close the loading toast
       toast.close(loadingToastId);
-      
-      // More detailed error handling
-      let errorMessage = "Failed to generate NDA PDF.";
-      
-      if (error.response) {
-        // Server responded with an error
-        if (error.response.data instanceof Blob) {
-          // Try to read the error message from the Blob
-          try {
-            const text = await error.response.data.text();
-            const errorData = JSON.parse(text);
-            errorMessage = errorData.message || errorMessage;
-          } catch (e) {
-            console.error("Error parsing error blob:", e);
-          }
-        } else {
-          errorMessage = error.response.data?.message || error.response.statusText || errorMessage;
-        }
-      }
-      
-      toast({
-        title: "Error",
-        description: errorMessage,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
-      
-      // Reset the apiCalledRef in case we need to retry
+      const errorMessage = error.response?.data?.message || "Failed to generate NDA PDF.";
+      toast({ title: "Error", description: errorMessage, status: "error", duration: 4000, isClosable: true });
       apiCalledRef.current = false;
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    // Only generate PDF when modal is open and we have metadata
     if (isOpen && ndaMetadata && !pdfUrl) {
       generateNdaPDF();
     }
-    
-    // Reset the apiCalledRef when the modal closes
     if (!isOpen) {
       apiCalledRef.current = false;
     }
-    
     return () => {
       if (pdfUrl) {
         URL.revokeObjectURL(pdfUrl);
@@ -152,53 +105,30 @@ const NDADocumentModal: React.FC<NDADocumentModalProps> = ({
 
   const handleAcceptNda = async () => {
     if (!confirmed) {
-      toast({
-        title: "Confirm NDA Acceptance",
-        description: "Please check the box to confirm your NDA acceptance.",
-        status: "warning",
-        duration: 4000,
-        isClosable: true,
-      });
+      toast({ title: "Confirm NDA Acceptance", description: "Please check the box to confirm your NDA.", status: "warning" });
       return;
     }
-    if (isSubmitting) return; // Prevent multiple clicks
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      const resData = await acceptNda(session.access_token);
-      console.log("Accept NDA Response:", resData);
+      const resData = await NdaService.acceptNda();
       if (resData === "Approved" || resData === "Already Approved") {
-        toast({
-          title: "NDA Accepted",
-          description: "Your NDA has been accepted. Access granted.",
-          status: "success",
-          duration: 4000,
-          isClosable: true,
-        });
-        onAccept(); // Callback from parent (make sure parent's setNdaApproved is defined)
-        // Small delay to ensure parent state updates before closing.
-        setTimeout(() => {
-          onClose();
-        }, 100);
+        toast({ title: "NDA Accepted", description: "Your NDA has been accepted. Access granted.", status: "success" });
+        onAccept();
+        setTimeout(() => onClose(), 100);
       }
     } catch (error: any) {
       console.error("Error accepting NDA:", error);
-      toast({
-        title: "Error",
-        description: error.response?.data || "Could not accept NDA.",
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
+      toast({ title: "Error", description: error.response?.data || "Could not accept NDA.", status: "error" });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Add a manual retry button in case the API call fails
   const handleRetryGeneratePDF = () => {
-    apiCalledRef.current = false; // Reset the flag
-    setPdfUrl(null); // Clear any existing URL
-    generateNdaPDF(); // Try again
+    apiCalledRef.current = false;
+    setPdfUrl(null);
+    generateNdaPDF();
   };
 
   return (

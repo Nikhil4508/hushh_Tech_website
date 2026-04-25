@@ -322,7 +322,6 @@ function App() {
             <Route path='/nda-form' element={
               <AuthRequiredRoute>
                 <NDARequestModalComponent
-                  session={session}
                   onSubmit={(result: string) => {
                     console.log("NDA submission result:", result);
                     // Handle post-submission actions here
@@ -333,7 +332,6 @@ function App() {
                   }}
                 />
               </AuthRequiredRoute>
-
             } />
             <Route path='/investor-profile' element={
               <ProtectedRoute>

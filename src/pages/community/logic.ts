@@ -7,14 +7,10 @@ import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import config from "../../resources/config/config";
 import { getPosts, PostData } from "../../data/posts";
 import { formatShortDate, parseDate } from "../../utils/dateFormatter";
 import { useAuthSession } from "../../auth/AuthSessionProvider";
-import {
-  checkAccessStatus,
-  getNdaMetadata,
-} from "../../services/access/accessControlApi";
+import { NdaService } from "../../services/api/ndaService";
 
 /* ── Constants ── */
 export const NDA_OPTION = "Sensitive Documents (NDA approval Req.)";
@@ -264,18 +260,18 @@ export const useCommunityListLogic = () => {
     }
     setNdaLoading(true);
     try {
-      const status = await checkAccessStatus(session.access_token);
-      if (status === "Approved") {
+      const accessStatus = await NdaService.checkAccessStatus();
+      if (accessStatus === "Approved") {
         setNdaApproved(true);
         return true;
       }
-      if (status === "Pending: Waiting for NDA Process") {
-        const meta = await getNdaMetadata(session.access_token);
+      if (accessStatus === "Pending: Waiting for NDA Process") {
+        const meta = await NdaService.getNdaMetadata();
         setNdaMetadata(meta.metadata);
         setShowNdaDocModal(true);
         return false;
       }
-      toast({ title: status, status: "error" });
+      toast({ title: accessStatus, status: "error" });
       return false;
     } catch (e: any) {
       toast({ title: e.message || "NDA check failed", status: "error" });

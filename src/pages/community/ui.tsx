@@ -30,7 +30,6 @@ export default function CommunityPage() {
     showNdaDocModal,
     setShowNdaDocModal,
     ndaMetadata,
-    session,
     onCategoryChange,
     handleBackClick,
     setNdaApproved,
@@ -194,13 +193,11 @@ export default function CommunityPage() {
       <NDARequestModal
         isOpen={showNdaModal}
         onClose={() => setShowNdaModal(false)}
-        session={session}
         onSubmit={() => {}}
       />
       <NDADocumentModal
         isOpen={showNdaDocModal}
         onClose={() => setShowNdaDocModal(false)}
-        session={session}
         ndaMetadata={ndaMetadata}
         onAccept={() => {
           setNdaApproved(true);
