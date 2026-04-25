@@ -30,7 +30,7 @@ describe("public investor profile API projection", () => {
       slug: "ankit-kumar-singh-2597e6b8",
       is_confirmed: false,
       basic_info: {
-        name: "Ankit Kumar Singh",
+        name: "a*** s",
         email: "a***t@hushh.ai",
       },
       investor_profile: null,
