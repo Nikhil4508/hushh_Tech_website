@@ -36,7 +36,13 @@ export class EventBus {
     this.listeners.get(event)!.add(listener);
 
     return () => {
-      this.listeners.get(event)?.delete(listener);
+      const eventListeners = this.listeners.get(event);
+      if (eventListeners) {
+        eventListeners.delete(listener);
+        if (eventListeners.size === 0) {
+          this.listeners.delete(event);
+        }
+      }
     };
   }
 
