@@ -44,6 +44,6 @@ export class NdaService extends ApiClient {
    * Generate an NDA PDF blob for the current user.
    */
   static async generateNdaPdfBlob(metadata: Record<string, unknown>): Promise<Blob> {
-    return this.invoke<Blob>("generate_nda_pdf", { metadata });
-  }
+      return this.invoke<Blob>("generate_nda_pdf", { metadata }, { responseType: "blob" });
+    }
 }
