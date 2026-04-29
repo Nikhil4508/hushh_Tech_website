@@ -123,7 +123,6 @@ const GlobalNDAGate: React.FC<GlobalNDAGateProps> = ({ children }) => {
 
       if (!cancelled) {
         setIsChecking(true);
-        setHasSignedNDA(null);
       }
 
       // USER IS AUTHENTICATED - Check NDA status (with 5s timeout)
