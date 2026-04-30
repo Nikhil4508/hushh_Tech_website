@@ -5,20 +5,16 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  // Graceful fallback or error depending on app requirements
-  // For this app, these are critical for core functionality
-  console.warn(
-    "[Supabase] Missing environment variables. Some features may not work."
+  // For this app, these are critical for core functionality.
+  // Fail fast if they are not configured.
+  throw new Error(
+    "Missing Supabase environment variables (VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY). The application cannot start."
   );
 }
 
-/**
- * Singleton Supabase client for use throughout the application.
- * Handles authentication persistence and auto-refresh by default.
- */
 export const supabase = createClient(
-  supabaseUrl || "",
-  supabaseAnonKey || "",
+  supabaseUrl,
+  supabaseAnonKey,
   {
     auth: {
       autoRefreshToken: true,
