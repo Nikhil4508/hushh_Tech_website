@@ -170,11 +170,15 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
       }
 
       console.error(err);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
-      }]);
+      setInput(text);
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        { 
+          role: 'assistant', 
+          content: 'Sorry, I encountered an error. Please try again.',
+          timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+        }
+      ]);
     } finally {
       setLoading(false);
     }
