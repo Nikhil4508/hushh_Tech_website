@@ -1,5 +1,6 @@
 import { DEFAULT_AUTH_REDIRECT, sanitizeInternalRedirect } from "../utils/security";
 import { normalizeLegacyOnboardingRedirectTarget } from "../services/onboarding/flow";
+import { ROUTES } from "../constants/routes";
 
 export const GUEST_AUTH_ROUTE_PREFIXES = [
   "/login",
@@ -15,7 +16,7 @@ export const PUBLIC_MARKETING_ROUTE_PREFIXES = [
   "/metrics",
   "/privacy-policy",
   "/faq",
-  "/career-privacy-policy",
+  ROUTES.CAREER_PRIVACY_POLICY,
   "/california-privacy-policy",
   "/eu-uk-jobs-privacy-policy",
   "/investor-guide",

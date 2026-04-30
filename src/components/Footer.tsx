@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaGlobe, FaAt, FaRss, FaPhone } from "react-icons/fa";
 import HushhLogo from "./images/Hushhogo.png";
 import { useAuthSession } from "../auth/AuthSessionProvider";
+import { ROUTES } from "../constants/routes";
 
 export default function Footer() {
   const { status } = useAuthSession();
@@ -161,7 +162,7 @@ export default function Footer() {
               California Privacy Policy
             </a>
             <a 
-              href="/career-privacy-policy" 
+              href={ROUTES.CAREER_PRIVACY_POLICY} 
               className="py-2 text-gray-300 hover:text-white text-base font-medium flex items-center justify-between group"
             >
               Careers Site Privacy Notice

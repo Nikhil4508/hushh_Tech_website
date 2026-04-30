@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ROUTES } from './constants/routes';
 import Navbar from './components/Navbar';
 import HomePage from './pages/home/ui';
 import Leadership from './components/Leadership';
@@ -178,7 +179,7 @@ function App() {
             <Route path="/career" element={<Career />} />
             <Route path="/career/*" element={<Career />} />
             <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-            <Route path='/career-privacy-policy' element={<CareersPrivacyPolicy />} />
+            <Route path={ROUTES.CAREER_PRIVACY_POLICY} element={<CareersPrivacyPolicy />} />
             <Route path="/community" element={
               <CommunityPage />
             } />
