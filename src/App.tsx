@@ -179,6 +179,7 @@ function App() {
             <Route path="/career" element={<Career />} />
             <Route path="/career/*" element={<Career />} />
             <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+            <Route path='/carrer-privacy-policy' element={<Navigate to={ROUTES.CAREER_PRIVACY_POLICY} replace />} />
             <Route path={ROUTES.CAREER_PRIVACY_POLICY} element={<CareersPrivacyPolicy />} />
             <Route path="/community" element={
               <CommunityPage />
