@@ -107,7 +107,7 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
     setProcessing(true);
     try {
       const data = await ChatService.createCheckout(visitorId, slug);
-      if (data.checkoutUrl) {
+      if (data?.checkoutUrl) {
         window.location.href = data.checkoutUrl;
       } else {
         throw new Error('Failed to create checkout session');
@@ -145,6 +145,10 @@ export function InvestorChatWidget({ slug, investorName }: { slug: string; inves
       const history = messages.map(m => ({ role: m.role, content: m.content }));
       const data = await ChatService.sendMessage(slug, text, visitorId, history);
       
+      if (!data?.reply) {
+        throw new Error("Failed to get a valid reply from the server.");
+      }
+
       const replyTimestamp = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply, timestamp: replyTimestamp }]);
       
