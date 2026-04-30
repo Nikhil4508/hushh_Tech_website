@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { encrypt } from '../src/utils/security';
+import { encrypt, decrypt } from '../src/utils/security';
 
 // Set dummy encryption key for tests
 process.env.VITE_ENCRYPTION_KEY = 'a'.repeat(32);
@@ -514,8 +514,6 @@ describe('Plaid Integration — Supabase Storage', () => {
         asset_report: assetsResult.available ? assetsResult.data : null,
         asset_report_token: assetsResult.data?.asset_report_token || null,
         investments: investResult.available ? investResult.data : null,
-         // The expected value should be the result of encrypting MOCK_ACCESS_TOKEN.
-        // This will require importing the `encrypt` function into the test file.
         plaid_access_token_encrypted: await encrypt(MOCK_ACCESS_TOKEN),
         auth_numbers_encrypted: null,
         available_products: {
@@ -553,6 +551,10 @@ describe('Plaid Integration — Supabase Storage', () => {
       // Status
       expect(payload.status).toBe('complete');
       expect(payload.fetch_errors).toBeNull();
+
+      // Encryption validation
+      const decryptedToken = await decrypt(payload.plaid_access_token_encrypted);
+      expect(decryptedToken).toEqual(MOCK_ACCESS_TOKEN);
     });
 
     it('should build partial payload when some products fail', () => {
