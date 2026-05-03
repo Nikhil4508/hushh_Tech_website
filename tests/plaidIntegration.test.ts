@@ -502,6 +502,8 @@ describe('Plaid Integration — Supabase Storage', () => {
       const balanceResult = { available: true, data: mockBalanceResponse, error: null, reason: null };
       const assetsResult = { available: true, data: mockAssetReportResponse, error: null, reason: null };
       const investResult = { available: true, data: mockInvestmentsResponse, error: null, reason: null };
+      const identityResult = { available: true, data: { names: ['Test User'] }, error: null, reason: null };
+      const authResult = { available: true, data: { numbers: { ach: [{ account: '123' }] } }, error: null, reason: null };
 
       const errors: Record<string, string> = {};
 
@@ -515,7 +517,8 @@ describe('Plaid Integration — Supabase Storage', () => {
         asset_report_token: assetsResult.data?.asset_report_token || null,
         investments: investResult.available ? investResult.data : null,
         plaid_access_token_encrypted: await encrypt(MOCK_ACCESS_TOKEN),
-        auth_numbers_encrypted: null,
+        identity_data_encrypted: await encrypt(JSON.stringify(identityResult.data)),
+        auth_numbers_encrypted: await encrypt(JSON.stringify(authResult.data)),
         available_products: {
           balance: balanceResult.available,
           assets: assetsResult.available,
@@ -555,6 +558,12 @@ describe('Plaid Integration — Supabase Storage', () => {
       // Encryption validation
       const decryptedToken = await decrypt(payload.plaid_access_token_encrypted);
       expect(decryptedToken).toEqual(MOCK_ACCESS_TOKEN);
+
+      const decryptedIdentity = await decrypt(payload.identity_data_encrypted);
+      expect(JSON.parse(decryptedIdentity)).toEqual(identityResult.data);
+
+      const decryptedAuth = await decrypt(payload.auth_numbers_encrypted);
+      expect(JSON.parse(decryptedAuth)).toEqual(authResult.data);
     });
 
     it('should build partial payload when some products fail', () => {
