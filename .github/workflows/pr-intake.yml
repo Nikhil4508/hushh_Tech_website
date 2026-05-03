@@ -13,7 +13,7 @@ permissions:
   checks: read
   contents: read
   issues: write
-  pull-requests: read
+  pull-requests: write
 
 concurrency:
   group: signalkeeper-preflight-${{ github.event.pull_request.number || github.run_id }}
